@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "no-cluely"
 version = "0.0.3"
 authors = [{ name = "TerminalSin" }]
-description = "Detect Cluely employee monitoring software and its evasion techniques"
+description = "Detect Cluely cheating software and its evasion techniques"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8"
