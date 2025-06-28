@@ -380,7 +380,6 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
 /// Only call this with pointers returned by get_cluely_report
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
-#[deny(unsafe_code)]
 pub unsafe extern "C" fn free_cluely_report(ptr: *mut c_char) {
     if !ptr.is_null() {
         unsafe {
