@@ -4,8 +4,8 @@ use std::ptr;
 
 // Core Graphics and Core Foundation bindings
 #[link(name = "CoreGraphics", kind = "framework")]
-#[link(name = "CoreFoundation")]
-#[link(name = "ApplicationServices")]
+#[link(name = "CoreFoundation", kind = "framework")]
+#[link(name = "ApplicationServices", kind = "framework")]
 extern "C" {
     fn CGWindowListCopyWindowInfo(option: u32, relative_window_id: u32) -> *const c_void;
     fn CFArrayGetCount(array: *const c_void) -> isize;
@@ -380,6 +380,7 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
 /// Only call this with pointers returned by get_cluely_report
 #[no_mangle]
 #[allow(clippy::missing_safety_doc)]
+#[deny(unsafe_code)]
 pub unsafe extern "C" fn free_cluely_report(ptr: *mut c_char) {
     if !ptr.is_null() {
         unsafe {

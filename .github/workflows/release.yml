@@ -48,7 +48,7 @@ jobs:
       with:
         toolchain: stable
         default: true
-        components: rustfmt, clippy
+        components: rustfmt
         
     - name: 📦 Setup Node.js
       uses: actions/setup-node@v4

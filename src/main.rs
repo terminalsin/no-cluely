@@ -5,8 +5,8 @@ use std::ptr;
 
 // Core Graphics and Core Foundation bindings
 #[link(name = "CoreGraphics", kind = "framework")]
-#[link(name = "CoreFoundation")]
-#[link(name = "ApplicationServices")]
+#[link(name = "CoreFoundation", kind = "framework")]
+#[link(name = "ApplicationServices", kind = "framework")]
 extern "C" {
     // Core Graphics Window List functions
     fn CGWindowListCopyWindowInfo(option: u32, relative_window_id: u32) -> *const c_void;
