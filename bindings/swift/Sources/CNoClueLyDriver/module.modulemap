@@ -1,0 +1,5 @@
+module CNoClueLyDriver {
+    header "no_cluely_driver.h"
+    link "no_cluely_driver"
+    export *
+} 

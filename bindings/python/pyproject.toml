@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "no-cluely-detector"
+version = "1.0.0"
+authors = [{ name = "No-Cluely Team" }]
+description = "Detect Cluely employee monitoring software and its evasion techniques"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: System :: Monitoring",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+keywords = [
+    "privacy",
+    "monitoring",
+    "detection",
+    "cluely",
+    "employee",
+    "screen-sharing",
+    "evasion",
+    "macos",
+]
+dependencies = ["typing-extensions>=4.0.0"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "mypy>=1.0.0",
+    "flake8>=5.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/no-cluely-driver"
+"Bug Reports" = "https://github.com/your-org/no-cluely-driver/issues"
+"Source" = "https://github.com/your-org/no-cluely-driver"
+"Documentation" = "https://github.com/your-org/no-cluely-driver#readme"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["no_cluely_detector*"]
+
+[tool.setuptools.package-data]
+no_cluely_detector = ["py.typed"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"

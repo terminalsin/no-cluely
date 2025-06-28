@@ -1,0 +1,23 @@
+[package]
+name = "cluely-detector-cli"
+version = "1.0.0"
+edition = "2021"
+description = "Command-line tool for detecting Cluely employee monitoring software"
+license = "MIT"
+authors = ["No-Cluely Team"]
+repository = "https://github.com/your-org/no-cluely-driver"
+keywords = ["privacy", "monitoring", "detection", "cluely", "employee"]
+categories = ["command-line-utilities", "development-tools"]
+
+[[bin]]
+name = "cluely-detector"
+path = "src/main.rs"
+
+[dependencies]
+no-cluely-driver = { path = "../.." }
+clap = { version = "4.0", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+colored = "2.0"
+ctrlc = "3.2"
+chrono = { version = "0.4", features = ["serde"] }

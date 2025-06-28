@@ -1,0 +1,9 @@
+**/target/**
+**/node_modules/**
+**/dist/**
+**/build/**
+**/packages/**
+**/venv/**
+**/__pycache__/**
+**/*.egg-info/**
+**/*.egg-info/**

@@ -1,0 +1,52 @@
+{
+    "name": "@no-cluely/detector",
+    "version": "1.0.0",
+    "description": "Detect Cluely employee monitoring software and its evasion techniques from Node.js, Electron, and TypeScript applications",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist/**/*",
+        "native/**/*",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "npm run build:rust && npm run build:ts",
+        "build:rust": "cd ../.. && cargo build --lib --release",
+        "build:ts": "tsc",
+        "test": "jest",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "privacy",
+        "monitoring",
+        "detection",
+        "cluely",
+        "employee",
+        "screen-sharing",
+        "evasion",
+        "node",
+        "electron",
+        "typescript"
+    ],
+    "author": "No-Cluely Team",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/your-org/no-cluely-driver"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "os": [
+        "darwin"
+    ],
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/jest": "^29.0.0",
+        "jest": "^29.0.0",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "koffi": "^2.8.0"
+    }
+}

@@ -1,0 +1,14 @@
+[package]
+name = "no-cluely-driver"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "no_cluely_driver"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "no-cluely-driver"
+path = "src/main.rs"
+
+[dependencies]
