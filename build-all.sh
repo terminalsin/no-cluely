@@ -45,7 +45,7 @@ BUILD_CLI=true
 BUILD_NODE=true
 BUILD_PYTHON=true
 BUILD_JAVA=true
-BUILD_SWIFT=true
+BUILD_SWIFT=false
 PACKAGE_ALL=true
 CLEAN=false
 
