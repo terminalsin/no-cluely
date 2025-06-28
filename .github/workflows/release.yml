@@ -151,6 +151,8 @@ jobs:
         
     - name: 🔨 Build Node.js Package
       run: |
+        # Build Rust library first
+        cargo build --lib --release
         ./build-all.sh --only-node
         
     - name: 📋 Update Package Version
@@ -204,6 +206,8 @@ jobs:
         
     - name: 🔨 Build Python Package
       run: |
+        # Build Rust library first
+        cargo build --lib --release
         # Ensure the library is copied to the package directory
         cd bindings/python
         cp ../../target/release/libno_cluely_driver.dylib no_cluely_detector/
@@ -263,6 +267,8 @@ jobs:
         
     - name: 🔨 Build Java Package
       run: |
+        # Build Rust library first
+        cargo build --lib --release
         ./build-all.sh --only-java
         
     - name: 🚀 Publish to Maven Central
@@ -341,6 +347,8 @@ jobs:
         
     - name: 🔨 Build Distribution
       run: |
+        # Build Rust library first
+        cargo build --lib --release
         chmod +x build-all.sh
         ./build-all.sh
         
