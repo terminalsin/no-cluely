@@ -126,7 +126,7 @@ jobs:
     name: 📦 Publish Node.js Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ !github.event.inputs.dry_run }}
+    if: ${{ github.event.inputs.dry_run  == 'false' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
@@ -170,7 +170,7 @@ jobs:
     name: 🐍 Publish Python Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ !github.event.inputs.dry_run }}
+    if: ${{ github.event.inputs.dry_run  == 'false' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
@@ -224,7 +224,7 @@ jobs:
     name: ☕ Publish Java Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ !github.event.inputs.dry_run }}
+    if: ${{ github.event.inputs.dry_run  == 'false' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
