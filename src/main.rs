@@ -1,7 +1,7 @@
+use std::collections::{HashMap, HashSet};
 use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_int, c_void};
 use std::ptr;
-use std::collections::{HashMap, HashSet};
 
 // Core Graphics and Core Foundation bindings
 #[link(name = "CoreGraphics", kind = "framework")]
@@ -10,7 +10,7 @@ use std::collections::{HashMap, HashSet};
 extern "C" {
     // Core Graphics Window List functions
     fn CGWindowListCopyWindowInfo(option: u32, relative_window_id: u32) -> *const c_void;
-    
+
     // Core Foundation functions
     fn CFArrayGetCount(array: *const c_void) -> isize;
     fn CFArrayGetValueAtIndex(array: *const c_void, index: isize) -> *const c_void;
@@ -70,26 +70,20 @@ struct WindowInfo {
 
 fn create_cfstring(s: &str) -> *const c_void {
     let c_str = CString::new(s).unwrap();
-    unsafe {
-        CFStringCreateWithCString(
-            ptr::null(),
-            c_str.as_ptr(),
-            K_CF_STRING_ENCODING_UTF8,
-        )
-    }
+    unsafe { CFStringCreateWithCString(ptr::null(), c_str.as_ptr(), K_CF_STRING_ENCODING_UTF8) }
 }
 
 fn cfstring_to_string(cf_string: *const c_void) -> String {
     if cf_string.is_null() {
         return String::new();
     }
-    
+
     unsafe {
         let c_str_ptr = CFStringGetCStringPtr(cf_string, K_CF_STRING_ENCODING_UTF8);
         if !c_str_ptr.is_null() {
             return CStr::from_ptr(c_str_ptr).to_string_lossy().into_owned();
         }
-        
+
         let mut buffer = vec![0u8; 1024];
         let success = CFStringGetCString(
             cf_string,
@@ -97,7 +91,7 @@ fn cfstring_to_string(cf_string: *const c_void) -> String {
             buffer.len() as isize,
             K_CF_STRING_ENCODING_UTF8,
         );
-        
+
         if success {
             let c_str = CStr::from_ptr(buffer.as_ptr() as *const c_char);
             c_str.to_string_lossy().into_owned()
@@ -112,11 +106,11 @@ fn get_dict_string(dict: *const c_void, key: &str) -> String {
         let cf_key = create_cfstring(key);
         let value = CFDictionaryGetValue(dict, cf_key);
         CFRelease(cf_key);
-        
+
         if value.is_null() {
             return String::new();
         }
-        
+
         if CFGetTypeID(value) == CFStringGetTypeID() {
             cfstring_to_string(value)
         } else {
@@ -130,14 +124,18 @@ fn get_dict_int(dict: *const c_void, key: &str) -> i32 {
         let cf_key = create_cfstring(key);
         let value = CFDictionaryGetValue(dict, cf_key);
         CFRelease(cf_key);
-        
+
         if value.is_null() {
             return 0;
         }
-        
+
         if CFGetTypeID(value) == CFNumberGetTypeID() {
             let mut result: i32 = 0;
-            CFNumberGetValue(value, K_CF_NUMBER_INT_TYPE, &mut result as *mut i32 as *mut c_void);
+            CFNumberGetValue(
+                value,
+                K_CF_NUMBER_INT_TYPE,
+                &mut result as *mut i32 as *mut c_void,
+            );
             result
         } else {
             0
@@ -150,11 +148,11 @@ fn get_dict_bool(dict: *const c_void, key: &str) -> bool {
         let cf_key = create_cfstring(key);
         let value = CFDictionaryGetValue(dict, cf_key);
         CFRelease(cf_key);
-        
+
         if value.is_null() {
             return false;
         }
-        
+
         if CFGetTypeID(value) == CFBooleanGetTypeID() {
             CFBooleanGetValue(value)
         } else {
@@ -168,11 +166,11 @@ fn get_dict_float(dict: *const c_void, key: &str) -> f64 {
         let cf_key = create_cfstring(key);
         let value = CFDictionaryGetValue(dict, cf_key);
         CFRelease(cf_key);
-        
+
         if value.is_null() {
             return 0.0;
         }
-        
+
         if CFGetTypeID(value) == CFNumberGetTypeID() {
             let mut result: f64 = 0.0;
             CFNumberGetValue(value, 6, &mut result as *mut f64 as *mut c_void);
@@ -189,7 +187,7 @@ fn get_window_bounds(dict: *const c_void) -> HashMap<String, f64> {
         let cf_key = create_cfstring(WINDOW_BOUNDS);
         let bounds_dict = CFDictionaryGetValue(dict, cf_key);
         CFRelease(cf_key);
-        
+
         if !bounds_dict.is_null() {
             bounds.insert("X".to_string(), get_dict_float(bounds_dict, "X"));
             bounds.insert("Y".to_string(), get_dict_float(bounds_dict, "Y"));
@@ -203,21 +201,24 @@ fn get_window_bounds(dict: *const c_void) -> HashMap<String, f64> {
 // Detect Cluely's screen sharing evasion techniques
 fn detect_screen_sharing_evasion(window: &WindowInfo) -> Vec<String> {
     let mut evasion_techniques = Vec::new();
-    
+
     // Special handling for Cluely - it's inherently designed for monitoring/evasion
     if is_cluely_related(window) {
         evasion_techniques.push("Cluely employee monitoring software detected".to_string());
-        
+
         // Check for additional Cluely-specific techniques
         if window.sharing_state == 0 {
             evasion_techniques.push("Cluely window configured to avoid screen capture".to_string());
         }
         if window.layer > 0 {
-            evasion_techniques.push(format!("Cluely using elevated window layer: {}", window.layer));
+            evasion_techniques.push(format!(
+                "Cluely using elevated window layer: {}",
+                window.layer
+            ));
         }
         return evasion_techniques;
     }
-    
+
     // For non-Cluely processes, use conservative detection
     // 1. Off-screen positioning trick (common evasion technique)
     if let (Some(&x), Some(&y)) = (window.bounds.get("X"), window.bounds.get("Y")) {
@@ -226,13 +227,18 @@ fn detect_screen_sharing_evasion(window: &WindowInfo) -> Vec<String> {
             evasion_techniques.push("Extreme off-screen positioning detected".to_string());
         }
     }
-    
+
     // 2. Zero-dimension windows that should have content
-    if let (Some(&width), Some(&height)) = (window.bounds.get("Width"), window.bounds.get("Height")) {
-        if (width == 0.0 || height == 0.0) && window.is_onscreen && !window.name.is_empty() && window.name != "<No Title>" {
+    if let (Some(&width), Some(&height)) = (window.bounds.get("Width"), window.bounds.get("Height"))
+    {
+        if (width == 0.0 || height == 0.0)
+            && window.is_onscreen
+            && !window.name.is_empty()
+            && window.name != "<No Title>"
+        {
             evasion_techniques.push("Named window with zero dimensions".to_string());
         }
-        
+
         // 3. Sub-pixel dimensions for named windows (suspicious for content windows)
         if (width > 0.0 && width < 1.0) || (height > 0.0 && height < 1.0) {
             if !window.name.is_empty() && window.name != "<No Title>" && !is_system_window(window) {
@@ -240,40 +246,58 @@ fn detect_screen_sharing_evasion(window: &WindowInfo) -> Vec<String> {
             }
         }
     }
-    
+
     // 4. Layer manipulation - only flag extreme cases that are clearly evasive
     if window.layer < -100000 && !is_system_background_window(window) {
         evasion_techniques.push("Extremely deep layer positioning".to_string());
     }
-    
+
     // 5. Detect windows that are trying to be invisible during screen sharing
-    if window.name.to_lowercase().contains("hidden") ||
-       window.name.to_lowercase().contains("invisible") ||
-       window.name.to_lowercase().contains("stealth") {
+    if window.name.to_lowercase().contains("hidden")
+        || window.name.to_lowercase().contains("invisible")
+        || window.name.to_lowercase().contains("stealth")
+    {
         evasion_techniques.push("Explicitly hidden/stealth window".to_string());
     }
-    
+
     // 6. Detect apps that have suspiciously transparent windows
-    if window.is_onscreen && window.alpha < 0.01 && !window.name.is_empty() && window.name != "<No Title>" {
+    if window.is_onscreen
+        && window.alpha < 0.01
+        && !window.name.is_empty()
+        && window.name != "<No Title>"
+    {
         evasion_techniques.push("Nearly invisible content window".to_string());
     }
-    
+
     evasion_techniques
 }
 
 // Helper function to identify system windows that normally have sharing_state 0
 fn is_system_window(window: &WindowInfo) -> bool {
     let system_processes = [
-        "Window Server", "Dock", "SystemUIServer", "Control Center", 
-        "Spotlight", "Notification Center", "loginwindow", "Finder",
-        "TextInputMenuAgent", "Universal Control", "CursorUIViewService",
-        "Open and Save Panel Service", "Accessibility", "Wi-Fi", "Displays",
-        "Wallpaper"
+        "Window Server",
+        "Dock",
+        "SystemUIServer",
+        "Control Center",
+        "Spotlight",
+        "Notification Center",
+        "loginwindow",
+        "Finder",
+        "TextInputMenuAgent",
+        "Universal Control",
+        "CursorUIViewService",
+        "Open and Save Panel Service",
+        "Accessibility",
+        "Wi-Fi",
+        "Displays",
+        "Wallpaper",
     ];
-    
-    system_processes.iter().any(|&process| window.owner.contains(process)) ||
-    window.name == "Menubar" ||
-    window.layer >= 20 // Menu bar and overlay layers
+
+    system_processes
+        .iter()
+        .any(|&process| window.owner.contains(process))
+        || window.name == "Menubar"
+        || window.layer >= 20 // Menu bar and overlay layers
 }
 
 // Helper function to identify background/wallpaper windows
@@ -291,13 +315,13 @@ fn is_system_background_window(window: &WindowInfo) -> bool {
 fn is_cluely_related(window: &WindowInfo) -> bool {
     let name_lower = window.name.to_lowercase();
     let owner_lower = window.owner.to_lowercase();
-    
+
     // More specific Cluely detection - only flag actual Cluely processes
     // Exclude our own detection tool
     if owner_lower.contains("no-cluely") || name_lower.contains("no-cluely") {
         return false;
     }
-    
+
     // Look for actual Cluely processes
     name_lower.contains("cluely") ||
     owner_lower.contains("cluely") ||
@@ -314,16 +338,16 @@ fn is_cluely_related(window: &WindowInfo) -> bool {
 
 fn analyze_window_set(windows: &[WindowInfo]) -> Vec<String> {
     let mut analysis = Vec::new();
-    
+
     let total_windows = windows.len();
     let hidden_count = windows.iter().filter(|w| w.is_hidden).count();
-    
+
     // Only flag if the hidden ratio is extremely high (macOS systems have many legitimate hidden windows)
     // Increase threshold to be more conservative
     if hidden_count as f64 / total_windows as f64 > 0.85 {
         analysis.push("Extremely high ratio of hidden windows detected".to_string());
     }
-    
+
     // Look for coordinated window manipulation, but be more conservative
     let mut same_owner_groups: HashMap<String, usize> = HashMap::new();
     for window in windows {
@@ -331,7 +355,7 @@ fn analyze_window_set(windows: &[WindowInfo]) -> Vec<String> {
             *same_owner_groups.entry(window.owner.clone()).or_insert(0) += 1;
         }
     }
-    
+
     // Only flag non-system processes with very high window counts
     // Increase threshold to reduce false positives
     for (owner, count) in same_owner_groups {
@@ -339,33 +363,35 @@ fn analyze_window_set(windows: &[WindowInfo]) -> Vec<String> {
            !owner.contains("com.apple") && 
            !owner.contains("Apple") &&
            !owner.contains("Messages") && // Messages legitimately creates multiple conversation windows
-           !owner.contains("Chrome") {   // Chrome legitimately creates many tab windows
+           !owner.contains("Chrome")
+        {
+            // Chrome legitimately creates many tab windows
             analysis.push(format!("Suspicious multi-window pattern from: {}", owner));
         }
     }
-    
+
     analysis
 }
 
 fn detect_all_windows() -> Vec<WindowInfo> {
     let mut all_windows = Vec::new();
-    
+
     unsafe {
         let window_list = CGWindowListCopyWindowInfo(K_CG_WINDOW_LIST_OPTION_ALL, 0);
-        
+
         if window_list.is_null() {
             eprintln!("Failed to get window list");
             return all_windows;
         }
-        
+
         let count = CFArrayGetCount(window_list);
-        
+
         for i in 0..count {
             let window_dict = CFArrayGetValueAtIndex(window_list, i);
             if window_dict.is_null() {
                 continue;
             }
-            
+
             let name = get_dict_string(window_dict, WINDOW_NAME);
             let owner = get_dict_string(window_dict, WINDOW_OWNER_NAME);
             let window_id = get_dict_int(window_dict, WINDOW_NUMBER);
@@ -376,11 +402,15 @@ fn detect_all_windows() -> Vec<WindowInfo> {
             let store_type = get_dict_int(window_dict, WINDOW_STORE_TYPE);
             let backing_type = get_dict_int(window_dict, WINDOW_BACKING_TYPE);
             let bounds = get_window_bounds(window_dict);
-            
+
             let is_hidden = !is_onscreen || alpha < 0.1 || layer < 0;
-            
+
             all_windows.push(WindowInfo {
-                name: if name.is_empty() { "<No Title>".to_string() } else { name },
+                name: if name.is_empty() {
+                    "<No Title>".to_string()
+                } else {
+                    name
+                },
                 owner,
                 window_id,
                 layer,
@@ -393,46 +423,46 @@ fn detect_all_windows() -> Vec<WindowInfo> {
                 bounds,
             });
         }
-        
+
         CFRelease(window_list);
     }
-    
+
     all_windows
 }
 
 fn main() {
     println!("🎯 Cluely Screen Sharing Evasion Detector");
     println!("=========================================\n");
-    
+
     let windows = detect_all_windows();
-    
+
     println!("🔍 SCANNING FOR SCREEN SHARING EVASION TECHNIQUES:");
     println!("--------------------------------------------------");
-    
+
     let mut cluely_detected = false;
     let mut evasion_detected = false;
-    
+
     for window in &windows {
         let evasion_techniques = detect_screen_sharing_evasion(window);
         let is_cluely = is_cluely_related(window);
-        
+
         if !evasion_techniques.is_empty() {
             evasion_detected = true;
-            
+
             if is_cluely {
                 cluely_detected = true;
                 println!("🚨 CLUELY EVASION DETECTED:");
             } else {
                 println!("⚠️  Screen sharing evasion detected:");
             }
-            
+
             println!("   Window: {} [{}]", window.name, window.owner);
             println!("   Window ID: {}", window.window_id);
             println!("   Techniques used:");
             for technique in evasion_techniques {
                 println!("     • {}", technique);
             }
-            
+
             println!("   Technical details:");
             println!("     - Sharing State: {}", window.sharing_state);
             println!("     - Backing Type: {}", window.backing_type);
@@ -442,62 +472,75 @@ fn main() {
                 window.bounds.get("X"),
                 window.bounds.get("Y"),
                 window.bounds.get("Width"),
-                window.bounds.get("Height")
+                window.bounds.get("Height"),
             ) {
                 println!("     - Bounds: ({:.1}, {:.1}) {}x{}", x, y, w, h);
             }
             println!();
         }
     }
-    
+
     if !evasion_detected {
         println!("✅ No screen sharing evasion techniques detected");
     }
-    
+
     // Add debug output to show all potential Cluely-related processes
     println!("\n🔍 DEBUG: ALL NON-SYSTEM PROCESSES:");
     println!("----------------------------------");
     let mut seen_owners = HashSet::new();
     for window in &windows {
-        if !is_system_window(window) && !window.owner.is_empty() && seen_owners.insert(window.owner.clone()) {
+        if !is_system_window(window)
+            && !window.owner.is_empty()
+            && seen_owners.insert(window.owner.clone())
+        {
             println!("📱 Process: {}", window.owner);
         }
     }
-    
+
     // Show potentially suspicious windows
     println!("\n🔍 DEBUG: POTENTIALLY SUSPICIOUS WINDOWS:");
     println!("------------------------------------------");
     for window in &windows {
-        if !is_system_window(window) && (window.sharing_state == 0 || window.alpha < 0.5 || window.layer < 0) {
+        if !is_system_window(window)
+            && (window.sharing_state == 0 || window.alpha < 0.5 || window.layer < 0)
+        {
             println!("🤔 Window: {} [{}]", window.name, window.owner);
-            println!("   - Sharing State: {}, Alpha: {:.3}, Layer: {}", 
-                     window.sharing_state, window.alpha, window.layer);
+            println!(
+                "   - Sharing State: {}, Alpha: {:.3}, Layer: {}",
+                window.sharing_state, window.alpha, window.layer
+            );
             if let (Some(&x), Some(&y), Some(&w), Some(&h)) = (
                 window.bounds.get("X"),
                 window.bounds.get("Y"),
                 window.bounds.get("Width"),
-                window.bounds.get("Height")
+                window.bounds.get("Height"),
             ) {
                 println!("   - Bounds: ({:.1}, {:.1}) {}x{}", x, y, w, h);
             }
             println!();
         }
     }
-    
+
     println!("🔬 SYSTEM-WIDE ANALYSIS:");
     println!("------------------------");
-    
+
     let analysis_results = analyze_window_set(&windows);
     for result in analysis_results {
         println!("📊 {}", result);
     }
-    
+
     println!("\n📋 DETECTION SUMMARY:");
     println!("--------------------");
     println!("Total windows analyzed: {}", windows.len());
-    println!("Screen sharing evasion detected: {}", if evasion_detected { "YES" } else { "NO" });
-    println!("Cluely specifically detected: {}", if cluely_detected { "YES" } else { "NO" });
-    
+    println!(
+        "Screen sharing evasion detected: {}",
+        if evasion_detected { "YES" } else { "NO" }
+    );
+    println!(
+        "Cluely specifically detected: {}",
+        if cluely_detected { "YES" } else { "NO" }
+    );
+
     if cluely_detected {
         println!("\n🚨 CLUELY DETECTION CONFIRMED");
         println!("=============================");
