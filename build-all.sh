@@ -242,10 +242,12 @@ if [ "$BUILD_PYTHON" = true ]; then
     else
         print_status "Building Python package..."
         
-        # Copy the built library to the Python package directory if it doesn't exist
+        # Ensure Rust library is built first
         if [ ! -f "../../target/release/libno_cluely_driver.dylib" ]; then
-            print_error "Rust library not found. Build Rust library first."
-            exit 1
+            print_status "Rust library not found. Building it now..."
+            cd ../..
+            cargo build --lib --release
+            cd bindings/python
         fi
         
         # Check if library already exists in Python package directory
