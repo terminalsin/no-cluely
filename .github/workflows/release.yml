@@ -98,10 +98,10 @@ jobs:
         cd bindings/python
         pip install dist/*.whl
         python -c "
-          from no_cluely_detector import ClueLyDetector
-          print('✅ Python bindings working')
-          result = ClueLyDetector.detect_cluely_detailed()
-          print('Detection result:', result.is_detected)
+from no_cluely_detector import ClueLyDetector
+print('✅ Python bindings working')
+result = ClueLyDetector.detect_cluely_detailed()
+print('Detection result:', result.is_detected)
         "
         
     - name: 🧪 Test Java Bindings

@@ -70,10 +70,10 @@ jobs:
         cd bindings/node
         npm test || echo "No tests configured yet"
         node -e "
-          const { ClueLyDetector } = require('./dist/index.js');
-          console.log('✅ Node.js bindings working');
-          const result = ClueLyDetector.detectClueLyDetailed();
-          console.log('Detection result:', result.isDetected);
+const { ClueLyDetector } = require('./dist/index.js');
+console.log('✅ Node.js bindings working');
+const result = ClueLyDetector.detectClueLyDetailed();
+console.log('Detection result:', result.isDetected);
         "
         
     - name: 🧪 Test Python Bindings
@@ -81,10 +81,10 @@ jobs:
         cd bindings/python
         pip install dist/*.whl
         python -c "
-          from no_cluely_detector import ClueLyDetector
-          print('✅ Python bindings working')
-          result = ClueLyDetector.detect_cluely_detailed()
-          print('Detection result:', result.is_detected)
+from no_cluely_detector import ClueLyDetector
+print('✅ Python bindings working')
+result = ClueLyDetector.detect_cluely_detailed()
+print('Detection result:', result.is_detected)
         "
         
     - name: 🧪 Test Java Bindings
