@@ -87,10 +87,10 @@ jobs:
       run: |
         cd bindings/node
         node -e "
-          const { ClueLyDetector } = require('./dist/index.js');
-          console.log('✅ Node.js bindings working');
-          const result = ClueLyDetector.detectClueLyDetailed();
-          console.log('Detection result:', result.isDetected);
+const { ClueLyDetector } = require('./dist/index.js');
+console.log('✅ Node.js bindings working');
+const result = ClueLyDetector.detectClueLyDetailed();
+console.log('Detection result:', result.isDetected);
         "
         
     - name: 🧪 Test Python Bindings
