@@ -126,7 +126,7 @@ jobs:
     name: 📦 Publish Node.js Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ github.event.inputs.dry_run  == 'false' }}
+    if: ${{ github.event.inputs.dry_run != 'true' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
@@ -170,7 +170,7 @@ jobs:
     name: 🐍 Publish Python Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ github.event.inputs.dry_run  == 'false' }}
+    if: ${{ github.event.inputs.dry_run != 'true' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
@@ -204,6 +204,10 @@ jobs:
         
     - name: 🔨 Build Python Package
       run: |
+        # Ensure the library is copied to the package directory
+        cd bindings/python
+        cp ../../target/release/libno_cluely_driver.dylib no_cluely_detector/
+        cd ../..
         ./build-all.sh --only-python
         
     - name: 🔍 Check Package
@@ -224,7 +228,7 @@ jobs:
     name: ☕ Publish Java Package
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ github.event.inputs.dry_run  == 'false' }}
+    if: ${{ github.event.inputs.dry_run != 'true' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status

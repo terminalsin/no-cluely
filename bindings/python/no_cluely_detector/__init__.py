@@ -36,6 +36,11 @@ def _find_library() -> str:
     # Try relative to this package first
     current_dir = Path(__file__).parent
     lib_paths = [
+        # First try in the package directory (bundled with the package)
+        current_dir / "libno_cluely_driver.dylib",
+        # Then try in the parent directory (build script puts it here)
+        current_dir / ".." / "libno_cluely_driver.dylib",
+        # Then try development locations
         current_dir
         / ".."
         / ".."
@@ -44,7 +49,7 @@ def _find_library() -> str:
         / "release"
         / "libno_cluely_driver.dylib",
         current_dir / ".." / ".." / "target" / "release" / "libno_cluely_driver.dylib",
-        current_dir / "libno_cluely_driver.dylib",
+        # Finally try system locations
         Path("/usr/local/lib/libno_cluely_driver.dylib"),
         Path("/opt/homebrew/lib/libno_cluely_driver.dylib"),
     ]

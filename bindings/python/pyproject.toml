@@ -58,7 +58,7 @@ where = ["."]
 include = ["no_cluely_detector*"]
 
 [tool.setuptools.package-data]
-no_cluely_detector = ["py.typed"]
+no_cluely_detector = ["py.typed", "libno_cluely_driver.dylib"]
 
 [tool.black]
 line-length = 88

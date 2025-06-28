@@ -248,9 +248,14 @@ if [ "$BUILD_PYTHON" = true ]; then
             exit 1
         fi
         
-        # Check if library already exists in Python package
+        # Check if library already exists in Python package directory
+        if [ ! -f "no_cluely_detector/libno_cluely_driver.dylib" ]; then
+            print_status "Copying Rust library to Python package directory..."
+            cp ../../target/release/libno_cluely_driver.dylib no_cluely_detector/
+        fi
+        
+        # Also copy to the parent directory for backward compatibility
         if [ ! -f "libno_cluely_driver.dylib" ]; then
-            print_status "Copying Rust library to Python package..."
             cp ../../target/release/libno_cluely_driver.dylib .
         fi
         

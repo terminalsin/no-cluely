@@ -1,0 +1,5 @@
+include libno_cluely_driver.dylib
+include no_cluely_detector/libno_cluely_driver.dylib
+include no_cluely_detector/py.typed
+recursive-include no_cluely_detector *.dylib
+recursive-include no_cluely_detector *.typed 
