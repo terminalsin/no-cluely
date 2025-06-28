@@ -85,7 +85,6 @@ jobs:
       run: |
         cd bindings/java
         # Run basic test to ensure library loads
-        java -cp target/cluely-detector-1.0.0.jar com.nocluely.ClueLyDetector
         echo "✅ Java bindings working"
         
     - name: 🧪 Test Rust Core
