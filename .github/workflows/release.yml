@@ -31,6 +31,14 @@ jobs:
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
       
+    - name: 🐛 Debug Workflow Inputs
+      run: |
+        echo "🔍 Event name: '${{ github.event_name }}'"
+        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+        echo "🔍 Version input: '${{ github.event.inputs.version }}'"
+        echo "🔍 Release tag: '${{ github.event.release.tag_name }}'"
+        echo "🔍 All inputs: ${{ toJSON(github.event.inputs) }}"
+      
     - name: 🔍 Determine Version
       id: version
       run: |
@@ -121,6 +129,12 @@ jobs:
     if: ${{ !github.event.inputs.dry_run }}
     
     steps:
+    - name: 🐛 Debug Dry Run Status
+      run: |
+        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+        echo "🔍 Event name: '${{ github.event_name }}'"
+        
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
       
@@ -159,6 +173,12 @@ jobs:
     if: ${{ !github.event.inputs.dry_run }}
     
     steps:
+    - name: 🐛 Debug Dry Run Status
+      run: |
+        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+        echo "🔍 Event name: '${{ github.event_name }}'"
+        
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
       
@@ -207,6 +227,12 @@ jobs:
     if: ${{ !github.event.inputs.dry_run }}
     
     steps:
+    - name: 🐛 Debug Dry Run Status
+      run: |
+        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+        echo "🔍 Event name: '${{ github.event_name }}'"
+        
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
       
@@ -252,6 +278,12 @@ jobs:
     if: ${{ !github.event.inputs.dry_run }}
     
     steps:
+    - name: 🐛 Debug Dry Run Status
+      run: |
+        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+        echo "🔍 Event name: '${{ github.event_name }}'"
+        
     - name: 📥 Checkout Code
       uses: actions/checkout@v4
       
