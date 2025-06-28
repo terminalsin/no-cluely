@@ -359,7 +359,7 @@ fn analyze_window_set(windows: &[WindowInfo]) -> Vec<String> {
     // Only flag non-system processes with very high window counts
     // Increase threshold to reduce false positives
     for (owner, count) in same_owner_groups {
-        if count > 20 && 
+        if count > 20 &&
            !owner.contains("com.apple") && 
            !owner.contains("Apple") &&
            !owner.contains("Messages") && // Messages legitimately creates multiple conversation windows
