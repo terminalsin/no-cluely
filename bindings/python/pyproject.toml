@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "no-cluely-detector"
-version = "1.0.0"
-authors = [{ name = "No-Cluely Team" }]
+name = "no-cluely"
+version = "0.0.3"
+authors = [{ name = "TerminalSin" }]
 description = "Detect Cluely employee monitoring software and its evasion techniques"
 readme = "README.md"
 license = { text = "MIT" }
@@ -48,17 +48,17 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-org/no-cluely-driver"
-"Bug Reports" = "https://github.com/your-org/no-cluely-driver/issues"
-"Source" = "https://github.com/your-org/no-cluely-driver"
-"Documentation" = "https://github.com/your-org/no-cluely-driver#readme"
+Homepage = "https://github.com/terminalsin/no-cluely"
+"Bug Reports" = "https://github.com/terminalsin/no-cluely/issues"
+"Source" = "https://github.com/terminalsin/no-cluely"
+"Documentation" = "https://github.com/terminalsin/no-cluely#readme"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["no_cluely_detector*"]
+include = ["no_cluely"]
 
 [tool.setuptools.package-data]
-no_cluely_detector = ["py.typed", "libno_cluely_driver.dylib"]
+no_cluely = ["py.typed", "libno_cluely_driver.dylib"]
 
 [tool.black]
 line-length = 88

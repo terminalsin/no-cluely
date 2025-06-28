@@ -101,7 +101,7 @@ _lib.get_cluely_window_count.restype = ctypes.c_uint32
 
 
 @dataclass(frozen=True)
-class ClueLyDetection:
+class CluelyDetection:
     """
     Detailed information about Cluely detection.
 
@@ -128,7 +128,7 @@ class ClueLyDetection:
     timestamp: datetime
 
 
-class ClueLyDetector:
+class NoCluely:
     """
     Cluely Detection Library
 
@@ -166,7 +166,7 @@ class ClueLyDetector:
         return result.is_detected, result.window_count
 
     @staticmethod
-    def detect_cluely_detailed() -> ClueLyDetection:
+    def detect_cluely_detailed() -> CluelyDetection:
         """
         Detailed detection with evasion technique analysis.
 
@@ -219,7 +219,7 @@ class ClueLyDetector:
                 f"Elevated layer positioning ({result.elevated_layer_count} windows)"
             )
 
-        return ClueLyDetection(
+        return CluelyDetection(
             is_detected=result.is_detected,
             window_count=result.window_count,
             screen_capture_evasion_count=result.screen_capture_evasion_count,
@@ -279,7 +279,7 @@ class ClueLyMonitor:
     def __init__(self):
         self._running = False
         self._thread: Optional[threading.Thread] = None
-        self._last_detection: Optional[ClueLyDetection] = None
+        self._last_detection: Optional[CluelyDetection] = None
         self._callbacks = {}
 
     def start(
@@ -331,7 +331,7 @@ class ClueLyMonitor:
             self._thread.join(timeout=5.0)
             self._thread = None
 
-    def get_last_detection(self) -> Optional[ClueLyDetection]:
+    def get_last_detection(self) -> Optional[CluelyDetection]:
         """
         Get the last detection result.
 
@@ -349,7 +349,7 @@ class ClueLyMonitor:
         """Internal monitoring loop."""
         while self._running:
             try:
-                detection = ClueLyDetector.detect_cluely_detailed()
+                detection = NoCluely.detect_cluely_detailed()
 
                 # Check for state changes
                 if self._last_detection:
@@ -383,29 +383,29 @@ class ClueLyMonitor:
 # Convenience functions for quick access
 def is_cluely_running() -> bool:
     """Convenience function: Check if Cluely is running."""
-    return ClueLyDetector.is_cluely_running()
+    return NoCluely.is_cluely_running()
 
 
 def detect_cluely() -> tuple[bool, int]:
     """Convenience function: Basic detection with window count."""
-    return ClueLyDetector.detect_cluely()
+    return NoCluely.detect_cluely()
 
 
-def detect_cluely_detailed() -> ClueLyDetection:
+def detect_cluely_detailed() -> CluelyDetection:
     """Convenience function: Detailed detection with evasion analysis."""
-    return ClueLyDetector.detect_cluely_detailed()
+    return NoCluely.detect_cluely_detailed()
 
 
 def get_cluely_report() -> str:
     """Convenience function: Get detailed text report."""
-    return ClueLyDetector.get_cluely_report()
+    return NoCluely.get_cluely_report()
 
 
 # Export public API
 __all__ = [
-    "ClueLyDetector",
-    "ClueLyDetection",
-    "ClueLyMonitor",
+    "NoCluely",
+    "CluelyDetection",
+    "CluelyMonitor",
     "is_cluely_running",
     "detect_cluely",
     "detect_cluely_detailed",
