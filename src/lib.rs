@@ -4,8 +4,8 @@ use std::ptr;
 
 // Core Graphics and Core Foundation bindings
 #[link(name = "CoreGraphics", kind = "framework")]
-#[link(name = "CoreFoundation", kind = "framework")]
-#[link(name = "ApplicationServices", kind = "framework")]
+#[link(name = "CoreFoundation")]
+#[link(name = "ApplicationServices")]
 extern "C" {
     fn CGWindowListCopyWindowInfo(option: u32, relative_window_id: u32) -> *const c_void;
     fn CFArrayGetCount(array: *const c_void) -> isize;
@@ -280,7 +280,7 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
         report.push_str("🚨 CLUELY EMPLOYEE MONITORING DETECTED\n");
         report.push_str("=====================================\n\n");
 
-        report.push_str(&format!("📊 Summary:\n"));
+        report.push_str("📊 Summary:\n");
         report.push_str(&format!(
             "   • Total Cluely windows: {}\n",
             result.window_count
@@ -299,7 +299,7 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
                 result.max_layer_detected
             ));
         }
-        report.push_str("\n");
+        report.push('\n');
 
         report.push_str("🔍 Evasion Techniques Detected:\n");
         if result.screen_capture_evasion_count > 0 {
@@ -314,7 +314,7 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
                 result.elevated_layer_count
             ));
         }
-        report.push_str("\n");
+        report.push('\n');
 
         report.push_str("📋 Window Details:\n");
         for (i, window) in windows.iter().enumerate() {
@@ -354,7 +354,7 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
             if !techniques.is_empty() {
                 report.push_str(&format!("      - Techniques: {}\n", techniques.join(", ")));
             }
-            report.push_str("\n");
+            report.push('\n');
         }
 
         report.push_str("⚠️  WARNING:\n");
@@ -379,7 +379,8 @@ pub extern "C" fn get_cluely_report() -> *mut c_char {
 /// This function is safe to call from Swift/C
 /// Only call this with pointers returned by get_cluely_report
 #[no_mangle]
-pub extern "C" fn free_cluely_report(ptr: *mut c_char) {
+#[allow(clippy::missing_safety_doc)]
+pub unsafe extern "C" fn free_cluely_report(ptr: *mut c_char) {
     if !ptr.is_null() {
         unsafe {
             let _ = CString::from_raw(ptr);

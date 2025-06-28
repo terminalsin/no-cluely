@@ -5,8 +5,8 @@ use std::ptr;
 
 // Core Graphics and Core Foundation bindings
 #[link(name = "CoreGraphics", kind = "framework")]
-#[link(name = "CoreFoundation", kind = "framework")]
-#[link(name = "ApplicationServices", kind = "framework")]
+#[link(name = "CoreFoundation")]
+#[link(name = "ApplicationServices")]
 extern "C" {
     // Core Graphics Window List functions
     fn CGWindowListCopyWindowInfo(option: u32, relative_window_id: u32) -> *const c_void;
@@ -54,6 +54,7 @@ const WINDOW_STORE_TYPE: &str = "kCGWindowStoreType";
 const WINDOW_BACKING_TYPE: &str = "kCGWindowBackingType";
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct WindowInfo {
     name: String,
     owner: String,
@@ -199,6 +200,7 @@ fn get_window_bounds(dict: *const c_void) -> HashMap<String, f64> {
 }
 
 // Detect Cluely's screen sharing evasion techniques
+#[allow(clippy::collapsible_if)]
 fn detect_screen_sharing_evasion(window: &WindowInfo) -> Vec<String> {
     let mut evasion_techniques = Vec::new();
 
