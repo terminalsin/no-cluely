@@ -368,7 +368,7 @@ fn analyze_window_set(windows: &[WindowInfo]) -> Vec<String> {
            !owner.contains("Chrome")
         {
             // Chrome legitimately creates many tab windows
-            analysis.push(format!("Suspicious multi-window pattern from: {}", owner));
+            analysis.push(format!("Suspicious multi-window pattern from: {owner}"));
         }
     }
 
@@ -462,7 +462,7 @@ fn main() {
             println!("   Window ID: {}", window.window_id);
             println!("   Techniques used:");
             for technique in evasion_techniques {
-                println!("     • {}", technique);
+                println!("     • {technique}");
             }
 
             println!("   Technical details:");
@@ -476,7 +476,7 @@ fn main() {
                 window.bounds.get("Width"),
                 window.bounds.get("Height"),
             ) {
-                println!("     - Bounds: ({:.1}, {:.1}) {}x{}", x, y, w, h);
+                println!("     - Bounds: ({x:.1}, {y:.1}) {w}x{h}");
             }
             println!();
         }
@@ -517,7 +517,7 @@ fn main() {
                 window.bounds.get("Width"),
                 window.bounds.get("Height"),
             ) {
-                println!("   - Bounds: ({:.1}, {:.1}) {}x{}", x, y, w, h);
+                println!("   - Bounds: ({x:.1}, {y:.1}) {w}x{h}");
             }
             println!();
         }
@@ -528,7 +528,7 @@ fn main() {
 
     let analysis_results = analyze_window_set(&windows);
     for result in analysis_results {
-        println!("📊 {}", result);
+        println!("📊 {result}");
     }
 
     println!("\n📋 DETECTION SUMMARY:");
