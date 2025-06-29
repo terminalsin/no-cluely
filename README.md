@@ -111,7 +111,30 @@ if (NoCluely.isCluelyRunning()) {
 cargo install no-cluely-driver
 ```
 
+### Basic Usage
 
+
+```rust
+fn cmd_check() {
+    println!("{}", "🎯 Cluely Detection".bold().blue());
+    println!("{}", "=================".blue());
+    println!();
+
+    let result = detect_cluely();
+    
+    if result.is_detected {
+        println!("{}", "🚨 CLUELY DETECTED".bold().red());
+        println!("{}", "Employee monitoring software is running on this system.".red());
+        println!();
+        println!("{}", "💡 Use 'cluely-detector report' for detailed analysis".yellow());
+        process::exit(1);
+    } else {
+        println!("{}", "✅ NO CLUELY DETECTED".bold().green());
+        println!("{}", "No employee monitoring software found.".green());
+        process::exit(0);
+    }
+}
+```
 
 
 ## License
