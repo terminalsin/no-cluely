@@ -1,4 +1,4 @@
-package com.nocluely;
+package io.github.terminalsin.nocluely;
 
 import org.jetbrains.annotations.NotNull;
 
