@@ -75,6 +75,45 @@ else:
     print("✅ System clean")
 ```
 
+## 🎯 NodeJS/Typescript/JavaScript
+
+```bash
+npm install no-cluely
+```
+
+### TypeScript/ES Modules
+```typescript
+import { NoCluely } from 'no-cluely';
+
+// Simple check
+if (NoCluely.isCluelyRunning()) {
+  console.log('⚠️ Employee monitoring detected!');
+}
+
+// Detailed analysis
+const detection = CluelyDetector.detectCluelyDetailed();
+console.log(`Severity: ${detection.severityLevel}`);
+console.log(`Techniques: ${detection.evasionTechniques.join(', ')}`);
+```
+
+### CommonJS/Node.js
+```javascript
+const { NoCluely } = require('no-cluely');
+
+// Simple check
+if (NoCluely.isCluelyRunning()) {
+  console.log('⚠️ Employee monitoring detected!');
+}
+```
+
+## 🦀 Rust
+```
+cargo install no-cluely-driver
+```
+
+
+
+
 ## License
 
 MIT License - See LICENSE file for details.
