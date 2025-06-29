@@ -10,8 +10,9 @@
         "README.md"
     ],
     "scripts": {
-        "build": "npm run build:rust && npm run build:ts",
+        "build": "npm run build:rust && npm run build:native && npm run build:ts",
         "build:rust": "cd ../.. && cargo build --lib --release",
+        "build:native": "mkdir -p native && cp ../../target/release/libno_cluely_driver.dylib native/",
         "build:ts": "tsc",
         "test": "jest",
         "prepublishOnly": "npm run build"

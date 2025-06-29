@@ -67,6 +67,8 @@ jobs:
     - name: 🧪 Test Node.js Bindings
       run: |
         cd bindings/node
+        mkdir -p native
+        cp ../../target/release/libno_cluely_driver.dylib native/
         npm test || echo "No tests configured yet"
         node -e "
           const { NoCluely } = require('./dist/index.js');

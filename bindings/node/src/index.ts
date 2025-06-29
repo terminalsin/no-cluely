@@ -1,6 +1,7 @@
 import * as koffi from 'koffi';
 import * as path from 'path';
 import * as os from 'os';
+import * as fs from 'fs';
 
 // Ensure we're on macOS
 if (os.platform() !== 'darwin') {
@@ -16,8 +17,30 @@ const CluelyDetectionResultStruct = koffi.struct('ClueLyDetectionResult', {
     max_layer_detected: 'int32',
 });
 
-// Locate the dynamic library
-const libraryPath = path.join(__dirname, '..', '..', '..', 'target', 'release', 'libno_cluely_driver.dylib');
+// Locate the dynamic library - try multiple locations
+function findLibraryPath(): string {
+    const possiblePaths = [
+        // Bundled with npm package
+        path.join(__dirname, '..', 'native', 'libno_cluely_driver.dylib'),
+        // Development environment
+        path.join(__dirname, '..', '..', '..', 'target', 'release', 'libno_cluely_driver.dylib'),
+        // Alternative bundled location
+        path.join(__dirname, '..', 'lib', 'libno_cluely_driver.dylib'),
+    ];
+
+    for (const libPath of possiblePaths) {
+        if (fs.existsSync(libPath)) {
+            return libPath;
+        }
+    }
+
+    throw new Error(
+        `Could not find libno_cluely_driver.dylib in any of the expected locations:\n${possiblePaths.join('\n')}\n\n` +
+        'Please ensure the native library is properly bundled with the package or built in development mode.'
+    );
+}
+
+const libraryPath = findLibraryPath();
 
 // Load the library
 const lib = koffi.load(libraryPath);

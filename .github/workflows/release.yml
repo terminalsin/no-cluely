@@ -94,6 +94,8 @@ jobs:
     - name: 🧪 Test Node.js Bindings
       run: |
         cd bindings/node
+        mkdir -p native
+        cp ../../target/release/libno_cluely_driver.dylib native/
         node -e "
           const { NoCluely } = require('./dist/index.js');
           console.log('✅ Node.js bindings working');
@@ -153,6 +155,11 @@ jobs:
       run: |
         # Build Rust library first
         cargo build --lib --release
+        # Copy native library to Node.js package
+        cd bindings/node
+        mkdir -p native
+        cp ../../target/release/libno_cluely_driver.dylib native/
+        cd ../..
         ./build-all.sh --only-node
         
     - name: 📋 Update Package Version

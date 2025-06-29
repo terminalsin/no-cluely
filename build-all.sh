@@ -215,6 +215,10 @@ if [ "$BUILD_NODE" = true ]; then
         print_status "Installing dependencies..."
         npm install
         
+        print_status "Copying native library..."
+        mkdir -p native
+        cp ../../target/release/libno_cluely_driver.dylib native/
+        
         print_status "Building TypeScript..."
         npm run build
         
