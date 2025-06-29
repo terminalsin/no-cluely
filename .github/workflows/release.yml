@@ -321,7 +321,7 @@ jobs:
         
     - name: 🚀 Publish Core Library to crates.io
       run: |
-        cargo publish --token ${{ secrets.CARGO_TOKEN }}
+        cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
         
     - name: ⏳ Wait for Crate Propagation
       run: sleep 60
@@ -329,7 +329,7 @@ jobs:
     - name: 🚀 Publish CLI to crates.io
       run: |
         cd bindings/cli
-        cargo publish --token ${{ secrets.CARGO_TOKEN }}
+        cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
 
   # ===== GITHUB RELEASES =====
   publish-github-release:
@@ -377,7 +377,7 @@ jobs:
         
         ### Node.js/TypeScript
         ```bash
-        npm install @no-cluely/detector
+        npm install no-cluely
         ```
         
         ### Python
@@ -397,7 +397,7 @@ jobs:
         ### Swift Package Manager
         ```swift
         dependencies: [
-            .package(url: "https://github.com/your-org/no-cluely-driver", from: "${{ needs.build-and-test.outputs.version }}")
+            .package(url: "https://github.com/terminalsin/no-cluely", from: "${{ needs.build-and-test.outputs.version }}")
         ]
         ```
         
@@ -411,8 +411,8 @@ jobs:
         
         ### Node.js
         ```javascript
-        const { ClueLyDetector } = require('@no-cluely/detector');
-        if (ClueLyDetector.isClueLyRunning()) {
+        const { NoCluely } = require('no-cluely');
+        if (NoCluely.isClueLyRunning()) {
             console.log('⚠️ Employee monitoring detected!');
         }
         ```
@@ -476,14 +476,14 @@ jobs:
         echo "| Component | Status | Notes |" >> $GITHUB_STEP_SUMMARY
         echo "|-----------|--------|-------|" >> $GITHUB_STEP_SUMMARY
         echo "| 🔨 Build & Test | ${{ needs.build-and-test.result == 'success' && '✅ Success' || '❌ Failed' }} | Core build and testing |" >> $GITHUB_STEP_SUMMARY
-        echo "| 📦 Node.js/npm | ${{ needs.publish-nodejs.result == 'success' && '✅ Published' || needs.publish-nodejs.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | @no-cluely/detector |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📦 Node.js/npm | ${{ needs.publish-nodejs.result == 'success' && '✅ Published' || needs.publish-nodejs.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely |" >> $GITHUB_STEP_SUMMARY
         echo "| 🐍 Python/PyPI | ${{ needs.publish-python.result == 'success' && '✅ Published' || needs.publish-python.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-detector |" >> $GITHUB_STEP_SUMMARY
         echo "| ☕ Java/Maven | ${{ needs.publish-java.result == 'success' && '✅ Published' || needs.publish-java.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | com.nocluely:cluely-detector |" >> $GITHUB_STEP_SUMMARY
         echo "| 🦀 Rust/crates.io | ${{ needs.publish-rust.result == 'success' && '✅ Published' || needs.publish-rust.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-driver + cluely-detector |" >> $GITHUB_STEP_SUMMARY
         echo "| 📋 GitHub Release | ${{ needs.publish-github-release.result == 'success' && '✅ Created' || '❌ Failed' }} | Binaries and distribution |" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 📦 Published Packages:" >> $GITHUB_STEP_SUMMARY
-        echo "- **npm**: \`npm install @no-cluely/detector\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **npm**: \`npm install no-cluely\`" >> $GITHUB_STEP_SUMMARY
         echo "- **PyPI**: \`pip install no-cluely-detector\`" >> $GITHUB_STEP_SUMMARY
         echo "- **Maven**: \`com.nocluely:cluely-detector:${{ needs.build-and-test.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
         echo "- **Cargo**: \`cargo install cluely-detector\`" >> $GITHUB_STEP_SUMMARY

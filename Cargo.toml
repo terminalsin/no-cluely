@@ -2,6 +2,15 @@
 name = "no-cluely-driver"
 version = "0.1.0"
 edition = "2021"
+description = "Rust library for detecting Cluely employee monitoring software and its evasion techniques"
+license = "MIT"
+authors = ["No-Cluely Team"]
+repository = "https://github.com/terminalsin/no-cluely"
+homepage = "https://github.com/terminalsin/no-cluely"
+documentation = "https://docs.rs/no-cluely-driver"
+keywords = ["privacy", "monitoring", "detection", "cluely", "employee"]
+categories = ["development-tools", "os::macos-apis"]
+readme = "README.md"
 
 [lib]
 name = "no_cluely_driver"
