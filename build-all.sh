@@ -152,7 +152,7 @@ if [ "$CLEAN" = true ]; then
     print_status "Cleaning Python build..."
     [ -d "bindings/python/build" ] && rm -rf bindings/python/build
     [ -d "bindings/python/dist" ] && rm -rf bindings/python/dist
-    [ -d "bindings/python/no_cluely_detector.egg-info" ] && rm -rf bindings/python/no_cluely_detector.egg-info
+    [ -d "bindings/python/no_cluely.egg-info" ] && rm -rf bindings/python/no_cluely.egg-info
     
     print_status "Cleaning Java build..."
     [ -d "bindings/java/target" ] && rm -rf bindings/java/target
@@ -251,9 +251,9 @@ if [ "$BUILD_PYTHON" = true ]; then
         fi
         
         # Check if library already exists in Python package directory
-        if [ ! -f "no_cluely_detector/libno_cluely_driver.dylib" ]; then
+        if [ ! -f "no_cluely/libno_cluely_driver.dylib" ]; then
             print_status "Copying Rust library to Python package directory..."
-            cp ../../target/release/libno_cluely_driver.dylib no_cluely_detector/
+            cp ../../target/release/libno_cluely_driver.dylib no_cluely/
         fi
         
         # Also copy to the parent directory for backward compatibility

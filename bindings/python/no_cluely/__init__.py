@@ -5,7 +5,7 @@ Detect Cluely employee monitoring software and its evasion techniques.
 This library provides Python bindings to a fast Rust-based detection engine.
 
 Basic Usage:
-    >>> from no_cluely_detector import ClueLyDetector
+    >>> from no_cluely import ClueLyDetector
     >>> if ClueLyDetector.is_cluely_running():
     ...     print("⚠️ Employee monitoring detected!")
 
