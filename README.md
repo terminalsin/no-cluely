@@ -57,10 +57,15 @@ if sharing_state == 0 {
 This library provides SDKs for:
 - [x] Python
 - [ ] Java
-- [ ] JavaScript/TypeScript
+- [x] JavaScript/TypeScript
+- [x] Rust
 - [ ] Swift
 
 ## 🐍  Python
+![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)
+NoCluely provides an SDK binding for python for you to integrate this with your desktop apps! Available on PyPI here:
+https://pypi.org/project/no-cluely/
+
 ```bash
 pip install no-cluely
 ```
@@ -92,7 +97,10 @@ else:
 ```
 
 ## 🎯 NodeJS/Typescript/JavaScript
+![NPM Version](https://img.shields.io/npm/v/no-cluely?style=for-the-badge&labelColor=red&color=gray)
 
+
+NoCluely is also incredibly generous in its SDK offering. TypeScript! This means integration with electronjs, etc. Whatever framework you use for your ChatGPT browser wrapper in a desktop app, we support it (maybe, MacOS only). Available on NPMjs here: https://www.npmjs.com/package/no-cluely
 ```bash
 npm install no-cluely
 ```
@@ -123,6 +131,9 @@ if (NoCluely.isCluelyRunning()) {
 ```
 
 ## 🦀 Rust
+![Crates Version](https://img.shields.io/crates/v/no-cluely-driver?style=for-the-badge&labelColor=orange&color=gray)
+
+For our wonderful community of low-level people, for which the basis of this driver is made from (everything else is a wrapper, I admit), we provide the driver on crates.io. It is available here: https://crates.io/crates/no-cluely-driver
 ```
 cargo install no-cluely-driver
 ```
