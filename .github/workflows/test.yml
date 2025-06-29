@@ -69,9 +69,9 @@ jobs:
         cd bindings/node
         npm test || echo "No tests configured yet"
         node -e "
-          const { ClueLyDetector } = require('./dist/index.js');
+          const { NoCluely } = require('./dist/index.js');
           console.log('✅ Node.js bindings working');
-          const result = ClueLyDetector.detectClueLyDetailed();
+          const result = NoCluely.detectCluelyDetailed();
           console.log('Detection result:', result.isDetected);
         "
         
