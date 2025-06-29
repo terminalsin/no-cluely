@@ -43,7 +43,7 @@ import java.util.List;
  * 
  * @since 1.0.0
  */
-public final class ClueLyDetector {
+public final class CluelyDetector {
 
     private static final String LIBRARY_NAME = "no_cluely_driver";
     private static final String LIBRARY_FILE = "libno_cluely_driver.dylib";
@@ -100,7 +100,7 @@ public final class ClueLyDetector {
     private static void loadLibraryFromResources() throws IOException {
         String resourcePath = "/native/" + LIBRARY_FILE;
 
-        try (InputStream in = ClueLyDetector.class.getResourceAsStream(resourcePath)) {
+        try (InputStream in = CluelyDetector.class.getResourceAsStream(resourcePath)) {
             if (in == null) {
                 throw new IOException("Native library not found in resources: " + resourcePath);
             }
@@ -177,7 +177,7 @@ public final class ClueLyDetector {
      * 
      * @since 1.0.0
      */
-    public static @NotNull ClueLyDetection detectClueLyDetailed() {
+    public static @NotNull CluelyDetection detectClueLyDetailed() {
         ensureLibraryLoaded();
 
         RawDetectionResult raw = nativeDetectClueLy();
@@ -190,19 +190,19 @@ public final class ClueLyDetector {
         if (raw.elevatedLayerCount > 0)
             techniqueCount++;
 
-        ClueLyDetection.SeverityLevel severityLevel;
+        CluelyDetection.SeverityLevel severityLevel;
         if (!raw.isDetected) {
-            severityLevel = ClueLyDetection.SeverityLevel.NONE;
+            severityLevel = CluelyDetection.SeverityLevel.NONE;
         } else {
             switch (techniqueCount) {
                 case 0:
-                    severityLevel = ClueLyDetection.SeverityLevel.LOW;
+                    severityLevel = CluelyDetection.SeverityLevel.LOW;
                     break;
                 case 1:
-                    severityLevel = ClueLyDetection.SeverityLevel.MEDIUM;
+                    severityLevel = CluelyDetection.SeverityLevel.MEDIUM;
                     break;
                 default:
-                    severityLevel = ClueLyDetection.SeverityLevel.HIGH;
+                    severityLevel = CluelyDetection.SeverityLevel.HIGH;
                     break;
             }
         }
@@ -216,7 +216,7 @@ public final class ClueLyDetector {
             evasionTechniques.add("Elevated layer positioning (" + raw.elevatedLayerCount + " windows)");
         }
 
-        return new ClueLyDetection(
+        return new CluelyDetection(
                 raw.isDetected,
                 raw.windowCount,
                 raw.screenCaptureEvasionCount,
@@ -310,7 +310,7 @@ public final class ClueLyDetector {
     }
 
     // Private constructor to prevent instantiation
-    private ClueLyDetector() {
+    private CluelyDetector() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 }

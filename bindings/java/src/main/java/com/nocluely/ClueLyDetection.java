@@ -17,7 +17,7 @@ import java.util.Objects;
  * 
  * @since 1.0.0
  */
-public final class ClueLyDetection {
+public final class CluelyDetection {
 
     /** True if Cluely monitoring software is detected */
     @JsonProperty("isDetected")
@@ -85,7 +85,7 @@ public final class ClueLyDetection {
      * @param timestamp                 Detection timestamp
      */
     @JsonCreator
-    public ClueLyDetection(
+    public CluelyDetection(
             @JsonProperty("isDetected") boolean isDetected,
             @JsonProperty("windowCount") int windowCount,
             @JsonProperty("screenCaptureEvasionCount") int screenCaptureEvasionCount,
@@ -211,7 +211,7 @@ public final class ClueLyDetection {
         if (obj == null || getClass() != obj.getClass())
             return false;
 
-        ClueLyDetection that = (ClueLyDetection) obj;
+        CluelyDetection that = (CluelyDetection) obj;
         return isDetected == that.isDetected &&
                 windowCount == that.windowCount &&
                 screenCaptureEvasionCount == that.screenCaptureEvasionCount &&
@@ -232,7 +232,7 @@ public final class ClueLyDetection {
 
     @Override
     public @NotNull String toString() {
-        return "ClueLyDetection{" +
+        return "CluelyDetection{" +
                 "isDetected=" + isDetected +
                 ", windowCount=" + windowCount +
                 ", screenCaptureEvasionCount=" + screenCaptureEvasionCount +

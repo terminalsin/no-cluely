@@ -270,30 +270,48 @@ jobs:
         
         echo "Setting up GPG for Maven artifact signing..."
         
-        # Create GPG directory
+        # Create GPG directory with proper permissions
         mkdir -p ~/.gnupg
         chmod 700 ~/.gnupg
         
-        # Configure GPG
-        echo "use-agent" >> ~/.gnupg/gpg.conf
+        # Configure GPG for non-interactive CI environment
+        echo "use-agent" > ~/.gnupg/gpg.conf
         echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-        echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+        echo "batch" >> ~/.gnupg/gpg.conf
+        echo "no-tty" >> ~/.gnupg/gpg.conf
+        echo "quiet" >> ~/.gnupg/gpg.conf
+        
+        echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+        echo "default-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
+        echo "max-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
+        
+        # Kill any existing GPG agent
+        pkill -f gpg-agent || true
+        
+        # Set GPG_TTY for proper terminal handling
+        export GPG_TTY=$(tty)
         
         # Import GPG key (decode from base64)
         echo "Importing GPG private key..."
-        echo "$MAVEN_GPG_PRIVATE_KEY" | base64 -d | gpg --batch --import --no-tty || {
+        echo "$MAVEN_GPG_PRIVATE_KEY" | base64 -d | gpg --batch --no-tty --import || {
           echo "❌ Failed to import GPG key. Check that MAVEN_GPG_PRIVATE_KEY is a valid base64-encoded GPG key."
           exit 1
         }
         
         # List keys for verification
         echo "Listing imported GPG keys:"
-        gpg --list-secret-keys --keyid-format LONG || {
+        gpg --batch --no-tty --list-secret-keys --keyid-format LONG || {
           echo "❌ Failed to list GPG keys"
           exit 1
         }
         
-        echo "✅ GPG setup completed"
+        # Test signing capability
+        echo "test" | gpg --batch --no-tty --armor --detach-sign --passphrase "$MAVEN_GPG_PASSPHRASE" || {
+          echo "❌ GPG signing test failed"
+          exit 1
+        }
+        
+        echo "✅ GPG setup completed and verified"
       env:
         MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
@@ -434,8 +452,8 @@ jobs:
         ### Java (Maven)
         ```xml
         <dependency>
-            <groupId>com.nocluely</groupId>
-            <artifactId>cluely-detector</artifactId>
+            <groupId>io.github.terminalsin</groupId>
+            <artifactId>no-cluely</artifactId>
             <version>${{ needs.build-and-test.outputs.version }}</version>
         </dependency>
         ```
@@ -524,13 +542,13 @@ jobs:
         echo "| 🔨 Build & Test | ${{ needs.build-and-test.result == 'success' && '✅ Success' || '❌ Failed' }} | Core build and testing |" >> $GITHUB_STEP_SUMMARY
         echo "| 📦 Node.js/npm | ${{ needs.publish-nodejs.result == 'success' && '✅ Published' || needs.publish-nodejs.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely |" >> $GITHUB_STEP_SUMMARY
         echo "| 🐍 Python/PyPI | ${{ needs.publish-python.result == 'success' && '✅ Published' || needs.publish-python.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-detector |" >> $GITHUB_STEP_SUMMARY
-        echo "| ☕ Java/Maven | ${{ needs.publish-java.result == 'success' && '✅ Published' || needs.publish-java.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | com.nocluely:cluely-detector |" >> $GITHUB_STEP_SUMMARY
+        echo "| ☕ Java/Maven | ${{ needs.publish-java.result == 'success' && '✅ Published' || needs.publish-java.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | io.github.terminalsin:no-cluely |" >> $GITHUB_STEP_SUMMARY
         echo "| 🦀 Rust/crates.io | ${{ needs.publish-rust.result == 'success' && '✅ Published' || needs.publish-rust.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-driver + cluely-detector |" >> $GITHUB_STEP_SUMMARY
         echo "| 📋 GitHub Release | ${{ needs.publish-github-release.result == 'success' && '✅ Created' || '❌ Failed' }} | Binaries and distribution |" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 📦 Published Packages:" >> $GITHUB_STEP_SUMMARY
         echo "- **npm**: \`npm install no-cluely\`" >> $GITHUB_STEP_SUMMARY
         echo "- **PyPI**: \`pip install no-cluely-detector\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Maven**: \`com.nocluely:cluely-detector:${{ needs.build-and-test.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Maven**: \`io.github.terminalsin:no-cluely:${{ needs.build-and-test.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
         echo "- **Cargo**: \`cargo install cluely-detector\`" >> $GITHUB_STEP_SUMMARY
         echo "- **GitHub**: Download binaries from releases" >> $GITHUB_STEP_SUMMARY 
