@@ -1,4 +1,4 @@
-package com.nocluely;
+package io.github.terminalsin.nocluely;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
