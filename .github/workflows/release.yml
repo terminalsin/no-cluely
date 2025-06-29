@@ -292,7 +292,7 @@ jobs:
     name: 🦀 Publish Rust Crate
     runs-on: macos-latest
     needs: build-and-test
-    if: ${{ !github.event.inputs.dry_run }}
+    if: ${{ github.event.inputs.dry_run != 'true' }}
     
     steps:
     - name: 🐛 Debug Dry Run Status
