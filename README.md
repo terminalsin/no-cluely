@@ -63,6 +63,7 @@ This library provides SDKs for:
 
 ## 🐍  Python
 ![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)
+
 NoCluely provides an SDK binding for python for you to integrate this with your desktop apps! Available on PyPI here:
 https://pypi.org/project/no-cluely/
 
