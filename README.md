@@ -8,7 +8,7 @@ Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and fe
   - [What goes on under the hood](#what-goes-on-under-the-hood)
   - [The detection](#the-detection)
 - [SDKs (Integrate detection in your app!)](#sdks-integrate-detection-in-your-app)
-  - [🐍  Python](#--python)
+  - [🐍  Python ](#--python-)
     - [Simple Detection](#simple-detection)
     - [Detailed Analysis](#detailed-analysis)
   - [🎯 NodeJS/Typescript/JavaScript](#-nodejstypescriptjavascript)
@@ -61,8 +61,8 @@ This library provides SDKs for:
 - [x] Rust
 - [ ] Swift
 
-## 🐍  Python
-![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)
+## 🐍  Python [![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)](https://pypi.org/project/no-cluely/)
+
 
 NoCluely provides an SDK binding for python for you to integrate this with your desktop apps! Available on PyPI here:
 https://pypi.org/project/no-cluely/
@@ -98,7 +98,7 @@ else:
 ```
 
 ## 🎯 NodeJS/Typescript/JavaScript
-![NPM Version](https://img.shields.io/npm/v/no-cluely?style=for-the-badge&labelColor=red&color=gray)
+[![NPM Version](https://img.shields.io/npm/v/no-cluely?style=for-the-badge&labelColor=red&color=gray)](https://www.npmjs.com/package/no-cluely)
 
 
 NoCluely is also incredibly generous in its SDK offering. TypeScript! This means integration with electronjs, etc. Whatever framework you use for your ChatGPT browser wrapper in a desktop app, we support it (maybe, MacOS only). Available on NPMjs here: https://www.npmjs.com/package/no-cluely
@@ -132,7 +132,7 @@ if (NoCluely.isCluelyRunning()) {
 ```
 
 ## 🦀 Rust
-![Crates Version](https://img.shields.io/crates/v/no-cluely-driver?style=for-the-badge&labelColor=orange&color=gray)
+[![Crates Version](https://img.shields.io/crates/v/no-cluely-driver?style=for-the-badge&labelColor=orange&color=gray)](https://crates.io/crates/no-cluely-driver)
 
 For our wonderful community of low-level people, for which the basis of this driver is made from (everything else is a wrapper, I admit), we provide the driver on crates.io. It is available here: https://crates.io/crates/no-cluely-driver
 ```
