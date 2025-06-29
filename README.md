@@ -1,7 +1,9 @@
 ![Untitled drawing (5)](https://github.com/user-attachments/assets/6a3730e3-5d5e-4d6a-b486-58d74307a31d)
 
+# NoCluely 
 Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and feeds you answers — in real time
 
+- [NoCluely](#nocluely)
 - [Detectable by Design](#detectable-by-design)
   - [What goes on under the hood](#what-goes-on-under-the-hood)
   - [The detection](#the-detection)
