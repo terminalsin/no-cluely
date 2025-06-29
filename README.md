@@ -2,7 +2,21 @@
 
 Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and feeds you answers — in real time
 
-## Detectable by Design
+- [Detectable by Design](#detectable-by-design)
+  - [What goes on under the hood](#what-goes-on-under-the-hood)
+  - [The detection](#the-detection)
+- [SDKs (Integrate detection in your app!)](#sdks-integrate-detection-in-your-app)
+  - [🐍  Python](#--python)
+    - [Simple Detection](#simple-detection)
+    - [Detailed Analysis](#detailed-analysis)
+  - [🎯 NodeJS/Typescript/JavaScript](#-nodejstypescriptjavascript)
+    - [TypeScript/ES Modules](#typescriptes-modules)
+    - [CommonJS/Node.js](#commonjsnodejs)
+  - [🦀 Rust](#-rust)
+    - [Basic Usage](#basic-usage)
+- [License](#license)
+
+# Detectable by Design
 <img width="818" alt="Screenshot 2025-06-29 at 12 52 01 PM" src="https://github.com/user-attachments/assets/5f222b62-d113-4543-8da9-e3e105d9558b" />
 
 
@@ -137,6 +151,6 @@ fn cmd_check() {
 ```
 
 
-## License
+# License
 
 MIT License - See LICENSE file for details.
