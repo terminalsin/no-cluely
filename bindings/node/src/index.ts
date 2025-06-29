@@ -8,7 +8,7 @@ if (os.platform() !== 'darwin') {
 }
 
 // Define the C struct type for detection results
-const ClueLyDetectionResultStruct = koffi.struct('ClueLyDetectionResult', {
+const CluelyDetectionResultStruct = koffi.struct('ClueLyDetectionResult', {
     is_detected: 'bool',
     window_count: 'uint32',
     screen_capture_evasion_count: 'uint32',
@@ -24,7 +24,7 @@ const lib = koffi.load(libraryPath);
 
 // Define the FFI functions
 const nativeIsClueLyRunning = lib.func('is_cluely_running', 'int', []);
-const nativeDetectClueLy = lib.func('detect_cluely', ClueLyDetectionResultStruct, []);
+const nativeDetectClueLy = lib.func('detect_cluely', CluelyDetectionResultStruct, []);
 const nativeGetClueLyReport = lib.func('get_cluely_report', 'str', []);
 const nativeFreeClueLyReport = lib.func('free_cluely_report', 'void', ['str']);
 const nativeGetClueLyWindowCount = lib.func('get_cluely_window_count', 'uint32', []);
@@ -32,7 +32,7 @@ const nativeGetClueLyWindowCount = lib.func('get_cluely_window_count', 'uint32',
 /**
  * Detailed information about Cluely detection
  */
-export interface ClueLyDetection {
+export interface CluelyDetection {
     /** True if Cluely monitoring software is detected */
     readonly isDetected: boolean;
 
@@ -67,7 +67,7 @@ export interface ClueLyDetection {
  * Detects Cluely employee monitoring software and its specific evasion techniques.
  * Works in Node.js, Electron, and TypeScript applications.
  */
-export class ClueLyDetector {
+export class NoCluely {
     /**
      * Simple check if Cluely monitoring software is running
      * 
@@ -75,7 +75,7 @@ export class ClueLyDetector {
      * 
      * @example
      * ```typescript
-     * if (ClueLyDetector.isClueLyRunning()) {
+     * if (NoCluely.isClueLyRunning()) {
      *   console.log('⚠️ Employee monitoring detected!');
      * }
      * ```
@@ -91,7 +91,7 @@ export class ClueLyDetector {
      * 
      * @example
      * ```typescript
-     * const { isDetected, windowCount } = ClueLyDetector.detectClueLy();
+     * const { isDetected, windowCount } = NoCluely.detectClueLy();
      * console.log(`Detected: ${isDetected}, Windows: ${windowCount}`);
      * ```
      */
@@ -110,14 +110,14 @@ export class ClueLyDetector {
      * 
      * @example
      * ```typescript
-     * const detection = ClueLyDetector.detectClueLyDetailed();
+     * const detection = NoCluely.detectCluelyDetailed();
      * if (detection.isDetected) {
      *   console.log(`Severity: ${detection.severityLevel}`);
      *   console.log(`Techniques: ${detection.evasionTechniques.join(', ')}`);
      * }
      * ```
      */
-    public static detectClueLyDetailed(): ClueLyDetection {
+    public static detectCluelyDetailed(): CluelyDetection {
         const result = nativeDetectClueLy();
         const report = nativeGetClueLyReport();
 
@@ -164,11 +164,11 @@ export class ClueLyDetector {
      * 
      * @example
      * ```typescript
-     * const report = ClueLyDetector.getClueLyReport();
+     * const report = NoCluely.getClueLyReport();
      * console.log(report);
      * ```
      */
-    public static getClueLyReport(): string {
+    public static getCluelyReport(): string {
         const report = nativeGetClueLyReport();
         return report || 'No report available';
     }
@@ -180,11 +180,11 @@ export class ClueLyDetector {
      * 
      * @example
      * ```typescript
-     * const count = ClueLyDetector.getClueLyWindowCount();
+     * const count = NoCluely.getClueLyWindowCount();
      * console.log(`Found ${count} Cluely windows`);
      * ```
      */
-    public static getClueLyWindowCount(): number {
+    public static getCluelyWindowCount(): number {
         return nativeGetClueLyWindowCount();
     }
 }
@@ -192,13 +192,13 @@ export class ClueLyDetector {
 /**
  * Monitor for Cluely detection changes
  */
-export class ClueLyMonitor {
+export class CluelyMonitor {
     private interval: NodeJS.Timeout | null = null;
-    private lastDetection: ClueLyDetection | null = null;
+    private lastDetection: CluelyDetection | null = null;
     private callbacks: {
-        onDetected?: (detection: ClueLyDetection) => void;
+        onDetected?: (detection: CluelyDetection) => void;
         onRemoved?: () => void;
-        onChange?: (detection: ClueLyDetection) => void;
+        onChange?: (detection: CluelyDetection) => void;
     } = {};
 
     /**
@@ -209,7 +209,7 @@ export class ClueLyMonitor {
      * 
      * @example
      * ```typescript
-     * const monitor = new ClueLyMonitor();
+     * const monitor = new CluelyMonitor();
      * monitor.start(5000, {
      *   onDetected: (detection) => console.log('Cluely detected!', detection),
      *   onRemoved: () => console.log('Cluely removed'),
@@ -219,15 +219,15 @@ export class ClueLyMonitor {
     public start(
         intervalMs: number = 10000,
         callbacks: {
-            onDetected?: (detection: ClueLyDetection) => void;
+            onDetected?: (detection: CluelyDetection) => void;
             onRemoved?: () => void;
-            onChange?: (detection: ClueLyDetection) => void;
+            onChange?: (detection: CluelyDetection) => void;
         } = {}
     ): void {
         this.callbacks = callbacks;
 
         this.interval = setInterval(() => {
-            const detection = ClueLyDetector.detectClueLyDetailed();
+            const detection = NoCluely.detectCluelyDetailed();
 
             // Check for state changes
             if (this.lastDetection) {
@@ -258,17 +258,17 @@ export class ClueLyMonitor {
     /**
      * Get the last detection result
      */
-    public getLastDetection(): ClueLyDetection | null {
+    public getLastDetection(): CluelyDetection | null {
         return this.lastDetection;
     }
 }
 
 // Export convenience functions for ES modules
-export const isClueLyRunning = ClueLyDetector.isClueLyRunning;
-export const detectClueLy = ClueLyDetector.detectClueLy;
-export const detectClueLyDetailed = ClueLyDetector.detectClueLyDetailed;
-export const getClueLyReport = ClueLyDetector.getClueLyReport;
-export const getClueLyWindowCount = ClueLyDetector.getClueLyWindowCount;
+export const isClueLyRunning = NoCluely.isClueLyRunning;
+export const detectClueLy = NoCluely.detectClueLy;
+export const detectClueLyDetailed = NoCluely.detectCluelyDetailed;
+export const getClueLyReport = NoCluely.getCluelyReport;
+export const getClueLyWindowCount = NoCluely.getCluelyWindowCount;
 
 // Default export for CommonJS
-export default ClueLyDetector; 
+export default NoCluely; 

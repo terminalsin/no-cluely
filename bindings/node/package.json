@@ -1,7 +1,7 @@
 {
-    "name": "@no-cluely/detector",
+    "name": "no-cluely",
     "version": "1.0.0",
-    "description": "Detect Cluely employee monitoring software and its evasion techniques from Node.js, Electron, and TypeScript applications",
+    "description": "Detect Cluely cheating software and its evasion techniques from Node.js, Electron, and TypeScript applications",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
@@ -32,7 +32,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/your-org/no-cluely-driver"
+        "url": "https://github.com/terminalsin/no-cluely"
     },
     "engines": {
         "node": ">=18.0.0"

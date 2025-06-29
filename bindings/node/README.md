@@ -1,36 +1,36 @@
-# @no-cluely/detector 🎯
+# NoCluely 🎯
 
-Detect Cluely employee monitoring software and its evasion techniques from Node.js, Electron, and TypeScript applications.
+Detect Cluely cheating software and its evasion techniques from Node.js, Electron, and TypeScript applications.
 
 ## Installation
 
 ```bash
-npm install @no-cluely/detector
+npm install no-cluely
 ```
 
 ## Quick Start
 
 ### TypeScript/ES Modules
 ```typescript
-import { ClueLyDetector } from '@no-cluely/detector';
+import { NoCluely } from 'no-cluely';
 
 // Simple check
-if (ClueLyDetector.isClueLyRunning()) {
+if (NoCluely.isCluelyRunning()) {
   console.log('⚠️ Employee monitoring detected!');
 }
 
 // Detailed analysis
-const detection = ClueLyDetector.detectClueLyDetailed();
+const detection = CluelyDetector.detectCluelyDetailed();
 console.log(`Severity: ${detection.severityLevel}`);
 console.log(`Techniques: ${detection.evasionTechniques.join(', ')}`);
 ```
 
 ### CommonJS/Node.js
 ```javascript
-const { ClueLyDetector } = require('@no-cluely/detector');
+const { NoCluely } = require('no-cluely');
 
 // Simple check
-if (ClueLyDetector.isClueLyRunning()) {
+if (NoCluely.isCluelyRunning()) {
   console.log('⚠️ Employee monitoring detected!');
 }
 ```
@@ -38,11 +38,11 @@ if (ClueLyDetector.isClueLyRunning()) {
 ### Electron Main Process
 ```typescript
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { ClueLyDetector } from '@no-cluely/detector';
+import { NoCluely } from 'no-cluely';
 
 app.whenReady().then(() => {
   // Check for monitoring software on startup
-  const detection = ClueLyDetector.detectClueLyDetailed();
+  const detection = CluelyDetector.detectCluelyDetailed();
   if (detection.isDetected) {
     console.log('⚠️ Employee monitoring detected in Electron app');
   }
@@ -50,55 +50,55 @@ app.whenReady().then(() => {
 
 // Expose detection to renderer process
 ipcMain.handle('check-cluely', () => {
-  return ClueLyDetector.detectClueLyDetailed();
+  return CluelyDetector.detectCluelyDetailed();
 });
 ```
 
 ## API Reference
 
-### ClueLyDetector Class
+### NoCluely Class
 
-#### `ClueLyDetector.isClueLyRunning(): boolean`
+#### `NoCluely.isCluelyRunning(): boolean`
 Simple check if Cluely is running.
 
 ```typescript
-const isDetected = ClueLyDetector.isClueLyRunning();
+const isDetected = CluelyDetector.isCluelyRunning();
 ```
 
-#### `ClueLyDetector.detectClueLy(): { isDetected: boolean; windowCount: number }`
+#### `CluelyDetector.detectCluely(): { isDetected: boolean; windowCount: number }`
 Basic detection with window count.
 
 ```typescript
-const { isDetected, windowCount } = ClueLyDetector.detectClueLy();
+const { isDetected, windowCount } = CluelyDetector.detectCluely();
 ```
 
-#### `ClueLyDetector.detectClueLyDetailed(): ClueLyDetection`
+#### `CluelyDetector.detectCluelyDetailed(): CluelyDetection`
 Comprehensive detection with evasion analysis.
 
 ```typescript
-const detection = ClueLyDetector.detectClueLyDetailed();
-// Returns: ClueLyDetection object with full details
+const detection = CluelyDetector.detectCluelyDetailed();
+// Returns: CluelyDetection object with full details
 ```
 
-#### `ClueLyDetector.getClueLyReport(): string`
+#### `CluelyDetector.getCluelyReport(): string`
 Get detailed text report.
 
 ```typescript
-const report = ClueLyDetector.getClueLyReport();
+const report = CluelyDetector.getCluelyReport();
 console.log(report);
 ```
 
-#### `ClueLyDetector.getClueLyWindowCount(): number`
+#### `CluelyDetector.getCluelyWindowCount(): number`
 Get number of Cluely windows.
 
 ```typescript
-const count = ClueLyDetector.getClueLyWindowCount();
+const count = CluelyDetector.getCluelyWindowCount();
 ```
 
-### ClueLyDetection Interface
+### CluelyDetection Interface
 
 ```typescript
-interface ClueLyDetection {
+interface CluelyDetection {
   readonly isDetected: boolean;
   readonly windowCount: number;
   readonly screenCaptureEvasionCount: number;
@@ -111,14 +111,14 @@ interface ClueLyDetection {
 }
 ```
 
-### ClueLyMonitor Class
+### CluelyMonitor Class
 
 Monitor for detection changes with event callbacks.
 
 ```typescript
-import { ClueLyMonitor } from '@no-cluely/detector';
+import { CluelyMonitor } from '@no-cluely/detector';
 
-const monitor = new ClueLyMonitor();
+const monitor = new CluelyMonitor();
 monitor.start(5000, {
   onDetected: (detection) => {
     console.log('🚨 Cluely detected!', detection);
@@ -140,12 +140,12 @@ monitor.stop();
 ### Express.js Server
 ```typescript
 import express from 'express';
-import { ClueLyDetector } from '@no-cluely/detector';
+import { CluelyDetector } from '@no-cluely/detector';
 
 const app = express();
 
 app.get('/security/check', (req, res) => {
-  const detection = ClueLyDetector.detectClueLyDetailed();
+  const detection = CluelyDetector.detectCluelyDetailed();
   res.json({
     monitoring_detected: detection.isDetected,
     severity: detection.severityLevel,
@@ -177,14 +177,14 @@ window.cluely.checkMonitoring().then(detection => {
 ### React Component
 ```tsx
 import React, { useState, useEffect } from 'react';
-import { ClueLyDetector, ClueLyDetection } from '@no-cluely/detector';
+import { CluelyDetector, CluelyDetection } from '@no-cluely/detector';
 
 export const MonitoringAlert: React.FC = () => {
-  const [detection, setDetection] = useState<ClueLyDetection | null>(null);
+  const [detection, setDetection] = useState<CluelyDetection | null>(null);
 
   useEffect(() => {
     const checkMonitoring = () => {
-      setDetection(ClueLyDetector.detectClueLyDetailed());
+      setDetection(CluelyDetector.detectCluelyDetailed());
     };
 
     checkMonitoring();
@@ -221,14 +221,14 @@ export const MonitoringAlert: React.FC = () => {
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { ClueLyDetector, type ClueLyDetection } from '@no-cluely/detector';
+import { CluelyDetector, type CluelyDetection } from '@no-cluely/detector';
 
-const detection = ref<ClueLyDetection | null>(null);
+const detection = ref<CluelyDetection | null>(null);
 let interval: NodeJS.Timeout;
 
 onMounted(() => {
   const checkMonitoring = () => {
-    detection.value = ClueLyDetector.detectClueLyDetailed();
+    detection.value = CluelyDetector.detectCluelyDetailed();
   };
   
   checkMonitoring();
@@ -243,11 +243,11 @@ onUnmounted(() => {
 
 ### Background Monitoring Service
 ```typescript
-import { ClueLyMonitor } from '@no-cluely/detector';
+import { CluelyMonitor } from '@no-cluely/detector';
 import { EventEmitter } from 'events';
 
 class SecurityService extends EventEmitter {
-  private monitor = new ClueLyMonitor();
+  private monitor = new CluelyMonitor();
 
   start() {
     this.monitor.start(5000, {
@@ -287,23 +287,23 @@ security.start();
 ### CLI Wrapper
 ```typescript
 #!/usr/bin/env node
-import { ClueLyDetector } from '@no-cluely/detector';
+import { CluelyDetector } from '@no-cluely/detector';
 
 const args = process.argv.slice(2);
 
 switch (args[0]) {
   case 'check':
-    const isDetected = ClueLyDetector.isClueLyRunning();
+    const isDetected = CluelyDetector.isCluelyRunning();
     console.log(isDetected ? '🚨 DETECTED' : '✅ NOT DETECTED');
     process.exit(isDetected ? 1 : 0);
     break;
     
   case 'report':
-    console.log(ClueLyDetector.getClueLyReport());
+    console.log(CluelyDetector.getCluelyReport());
     break;
     
   case 'json':
-    console.log(JSON.stringify(ClueLyDetector.detectClueLyDetailed(), null, 2));
+    console.log(JSON.stringify(CluelyDetector.detectCluelyDetailed(), null, 2));
     break;
     
   default:
@@ -330,10 +330,10 @@ module.exports = {
 ## Error Handling
 
 ```typescript
-import { ClueLyDetector } from '@no-cluely/detector';
+import { CluelyDetector } from '@no-cluely/detector';
 
 try {
-  const detection = ClueLyDetector.detectClueLyDetailed();
+  const detection = CluelyDetector.detectCluelyDetailed();
   // Process detection...
 } catch (error) {
   if (error.message.includes('only supported on macOS')) {
@@ -371,4 +371,4 @@ MIT License
 
 ## Contributing
 
-Issues and pull requests welcome at: https://github.com/your-org/no-cluely-driver 
+Issues and pull requests welcome at: https://github.com/terminalsin/no-cluely 
