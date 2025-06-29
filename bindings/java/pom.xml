@@ -5,14 +5,14 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.nocluely</groupId>
-    <artifactId>cluely-detector</artifactId>
+    <groupId>io.github.terminalsin</groupId>
+    <artifactId>no-cluely</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Cluely Detector Java</name>
-    <description>Java library for detecting Cluely employee monitoring software and its evasion techniques</description>
-    <url>https://github.com/your-org/no-cluely-driver</url>
+    <name>No Cluely Java</name>
+    <description>Java library for detecting Cluely cheating software and its evasion techniques</description>
+    <url>https://github.com/terminalsin/no-cluely</url>
 
     <licenses>
         <license>
@@ -31,9 +31,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/your-org/no-cluely-driver.git</connection>
-        <developerConnection>scm:git:ssh://github.com:your-org/no-cluely-driver.git</developerConnection>
-        <url>https://github.com/your-org/no-cluely-driver/tree/master</url>
+        <connection>scm:git:git://github.com/terminalsin/no-cluely.git</connection>
+        <developerConnection>scm:git:ssh://github.com:terminalsin/no-cluely.git</developerConnection>
+        <url>https://github.com/terminalsin/no-cluely/tree/master</url>
     </scm>
 
     <properties>
