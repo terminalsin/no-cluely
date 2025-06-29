@@ -8,7 +8,7 @@ Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and fe
   - [What goes on under the hood](#what-goes-on-under-the-hood)
   - [The detection](#the-detection)
 - [SDKs (Integrate detection in your app!)](#sdks-integrate-detection-in-your-app)
-  - [🐍  Python ](#--python-)
+  - [🐍  Python](#--python)
     - [Simple Detection](#simple-detection)
     - [Detailed Analysis](#detailed-analysis)
   - [🎯 NodeJS/Typescript/JavaScript](#-nodejstypescriptjavascript)
@@ -61,7 +61,8 @@ This library provides SDKs for:
 - [x] Rust
 - [ ] Swift
 
-## 🐍  Python [![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)](https://pypi.org/project/no-cluely/)
+## 🐍  Python 
+[![PyPI - Version](https://img.shields.io/pypi/v/no-cluely?style=for-the-badge&labelColor=green&color=gray)](https://pypi.org/project/no-cluely/)
 
 
 NoCluely provides an SDK binding for python for you to integrate this with your desktop apps! Available on PyPI here:
