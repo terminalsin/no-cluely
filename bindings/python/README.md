@@ -73,5 +73,4 @@ MIT License
 
 ## Contributing
 
-Issues and pull requests welcome at:
-https://github.com/your-org/no-cluely-driver
+Don't

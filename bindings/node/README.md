@@ -387,4 +387,4 @@ MIT License
 
 ## Contributing
 
-Issues and pull requests welcome at: https://github.com/terminalsin/no-cluely
+Don't
