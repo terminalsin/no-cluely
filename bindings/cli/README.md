@@ -1,10 +1,12 @@
 # Cluely Detector CLI 🎯
 
-A command-line tool for detecting Cluely employee monitoring software and its evasion techniques.
+A command-line tool for detecting Cluely employee monitoring software and its
+evasion techniques.
 
 ## Installation
 
 ### From Source
+
 ```bash
 git clone <repository>
 cd no-cluely-driver/bindings/cli
@@ -12,6 +14,7 @@ cargo build --release
 ```
 
 ### Using Cargo
+
 ```bash
 cargo install cluely-detector-cli
 ```
@@ -19,6 +22,7 @@ cargo install cluely-detector-cli
 ## Usage
 
 ### Quick Check
+
 ```bash
 # Simple detection check
 cluely-detector
@@ -27,12 +31,14 @@ cluely-detector check
 ```
 
 ### Detailed Report
+
 ```bash
 # Get comprehensive analysis with evasion techniques
 cluely-detector report
 ```
 
 ### Continuous Monitoring
+
 ```bash
 # Monitor for Cluely every 10 seconds (default)
 cluely-detector monitor
@@ -42,12 +48,14 @@ cluely-detector monitor --interval 30
 ```
 
 ### JSON Output
+
 ```bash
 # Machine-readable output for scripts/automation
 cluely-detector json
 ```
 
 ### Statistics
+
 ```bash
 # Show detection statistics and technique breakdown
 cluely-detector stats
@@ -56,6 +64,7 @@ cluely-detector stats
 ## Examples
 
 ### Basic Detection
+
 ```bash
 $ cluely-detector
 🎯 Cluely Detection
@@ -66,6 +75,7 @@ No employee monitoring software found.
 ```
 
 ### When Cluely is Detected
+
 ```bash
 $ cluely-detector
 🎯 Cluely Detection
@@ -78,6 +88,7 @@ Employee monitoring software is running on this system.
 ```
 
 ### Detailed Report
+
 ```bash
 $ cluely-detector report
 🚨 CLUELY EMPLOYEE MONITORING DETECTED
@@ -111,6 +122,7 @@ $ cluely-detector report
 ```
 
 ### JSON Output
+
 ```bash
 $ cluely-detector json
 {
@@ -129,6 +141,7 @@ $ cluely-detector json
 ```
 
 ### Statistics View
+
 ```bash
 $ cluely-detector stats
 📊 Detection Statistics
@@ -147,6 +160,7 @@ Evasion Techniques:
 ```
 
 ### Continuous Monitoring
+
 ```bash
 $ cluely-detector monitor
 🔍 Monitoring for Cluely (Press Ctrl+C to stop)
@@ -168,6 +182,7 @@ $ cluely-detector monitor
 ## Integration with Scripts
 
 ### Shell Script
+
 ```bash
 #!/bin/bash
 if cluely-detector check; then
@@ -179,6 +194,7 @@ fi
 ```
 
 ### With jq for JSON Processing
+
 ```bash
 # Get severity level
 SEVERITY=$(cluely-detector json | jq -r '.severity')
@@ -192,6 +208,7 @@ fi
 ```
 
 ### Automation Example
+
 ```bash
 #!/bin/bash
 # Daily monitoring script
@@ -216,4 +233,4 @@ fi
 
 ## License
 
-MIT License 
+MIT License
