@@ -17,13 +17,12 @@ Advanced Usage:
 
 import ctypes
 import platform
-import os
-from pathlib import Path
-from typing import List, Optional, NamedTuple, Union
-from dataclasses import dataclass
-from datetime import datetime
 import threading
 import time
+from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import List, Optional, Callable, Any
 
 # Ensure we're on macOS
 if platform.system() != "Darwin":
@@ -246,12 +245,13 @@ class NoCluely:
         report_ptr = _lib.get_cluely_report()
         try:
             if report_ptr:
-                return report_ptr.decode("utf-8")
+                result = report_ptr.decode("utf-8")
             else:
-                return "No report available"
+                result = "No report available"
         finally:
             if report_ptr:
                 _lib.free_cluely_report(report_ptr)
+        return result
 
     @staticmethod
     def get_cluely_window_count() -> int:
@@ -285,9 +285,9 @@ class ClueLyMonitor:
     def start(
         self,
         interval: float = 10.0,
-        on_detected: Optional[callable] = None,
-        on_removed: Optional[callable] = None,
-        on_change: Optional[callable] = None,
+        on_detected: Optional[Callable[..., Any]] = None,
+        on_removed: Optional[Callable[..., Any]] = None,
+        on_change: Optional[Callable[..., Any]] = None,
     ) -> None:
         """
         Start monitoring for Cluely detection changes.
@@ -315,9 +315,10 @@ class ClueLyMonitor:
         }
 
         self._running = True
-        self._thread = threading.Thread(target=self._monitor_loop, args=(interval,))
-        self._thread.daemon = True
-        self._thread.start()
+        thread = threading.Thread(target=self._monitor_loop, args=(interval,))
+        thread.daemon = True
+        self._thread = thread
+        thread.start()
 
     def stop(self) -> None:
         """
@@ -349,26 +350,30 @@ class ClueLyMonitor:
         """Internal monitoring loop."""
         while self._running:
             try:
-                detection = NoCluely.detect_cluely_detailed()
+                detection: CluelyDetection = NoCluely.detect_cluely_detailed()
 
                 # Check for state changes
                 if self._last_detection:
                     if detection.is_detected and not self._last_detection.is_detected:
                         # Just detected
-                        if self._callbacks["on_detected"]:
-                            self._callbacks["on_detected"](detection)
+                        callback = self._callbacks["on_detected"]
+                        if callback is not None:
+                            callback(detection)
                     elif not detection.is_detected and self._last_detection.is_detected:
                         # Just stopped
-                        if self._callbacks["on_removed"]:
-                            self._callbacks["on_removed"]()
+                        callback = self._callbacks["on_removed"]
+                        if callback is not None:
+                            callback()
                 else:
                     # First check
-                    if detection.is_detected and self._callbacks["on_detected"]:
-                        self._callbacks["on_detected"](detection)
+                    callback = self._callbacks["on_detected"]
+                    if detection.is_detected and callback is not None:
+                        callback(detection)
 
                 # Always call on_change if provided
-                if self._callbacks["on_change"]:
-                    self._callbacks["on_change"](detection)
+                callback = self._callbacks["on_change"]
+                if callback is not None:
+                    callback(detection)
 
                 self._last_detection = detection
 
