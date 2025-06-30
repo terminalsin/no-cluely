@@ -1,9 +1,18 @@
 ![Untitled drawing (5)](https://github.com/user-attachments/assets/6a3730e3-5d5e-4d6a-b486-58d74307a31d)
 
 # NoCluely 
-Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and feeds you answers — in real time
+Cluely is an ~~undetectable~~ AI that sees your screen, hears your calls, and feeds you answers — in real time. NoCluely helps YOU not rot your brain by obsessively and blindly following AI. See:
+-  [AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking
+ (MDPI.com)](https://www.mdpi.com/2075-4698/15/1/6)
+- [Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task  (MIT)](https://arxiv.org/abs/2506.08872) 
+- [Is AI making us dumb? (TechCrunch)](https://techcrunch.com/2025/02/10/is-ai-making-us-dumb/)
+
+But to be fair, I am a hypocrite. AI has assisted me in every step of creating this project. I'm just really doing this for the memes. Cluely is impressive in its own right, with its ability to consistently go viral. I'll bite and piggyback on it. Make me viral, Cluely.
+
+###  Table of Contents:
 
 - [NoCluely](#nocluely)
+    - [Table of Contents:](#table-of-contents)
 - [Detectable by Design](#detectable-by-design)
   - [What goes on under the hood](#what-goes-on-under-the-hood)
   - [The detection](#the-detection)
