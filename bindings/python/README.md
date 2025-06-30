@@ -1,6 +1,7 @@
 # NoCluely-py
 
-Python library for detecting Cluely employee monitoring software and its evasion techniques.
+Python library for detecting Cluely employee monitoring software and its evasion
+techniques.
 
 ## Installation
 
@@ -17,6 +18,7 @@ pip install no-cluely
 ## Quick Start
 
 ### Simple Detection
+
 ```python
 from no_cluely import NoCluely
 
@@ -28,6 +30,7 @@ else:
 ```
 
 ### Detailed Analysis
+
 ```python
 from no_cluely import NoCluely
 
@@ -43,6 +46,7 @@ else:
 ```
 
 ### Real-time Monitoring
+
 ```python
 from no_cluely import CluelyMonitor
 
@@ -69,4 +73,5 @@ MIT License
 
 ## Contributing
 
-Issues and pull requests welcome at: https://github.com/your-org/no-cluely-driver 
+Issues and pull requests welcome at:
+https://github.com/your-org/no-cluely-driver

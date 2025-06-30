@@ -6,18 +6,18 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., 1.0.0)'
+        description: "Version to release (e.g., 1.0.0)"
         required: true
       dry_run:
-        description: 'Dry run (skip actual publishing)'
+        description: "Dry run (skip actual publishing)"
         type: boolean
         default: false
 
 env:
   CARGO_TERM_COLOR: always
-  NODE_VERSION: '20'
-  PYTHON_VERSION: '3.11'
-  JAVA_VERSION: '11'
+  NODE_VERSION: "20"
+  PYTHON_VERSION: "3.11"
+  JAVA_VERSION: "11"
 
 jobs:
   # ===== BUILD & TEST =====
@@ -26,102 +26,102 @@ jobs:
     runs-on: macos-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🐛 Debug Workflow Inputs
-      run: |
-        echo "🔍 Event name: '${{ github.event_name }}'"
-        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
-        echo "🔍 Version input: '${{ github.event.inputs.version }}'"
-        echo "🔍 Release tag: '${{ github.event.release.tag_name }}'"
-        echo "🔍 All inputs: ${{ toJSON(github.event.inputs) }}"
-      
-    - name: 🔍 Determine Version
-      id: version
-      run: |
-        if [[ "${{ github.event_name }}" == "release" ]]; then
-          VERSION="${{ github.event.release.tag_name }}"
-          VERSION="${VERSION#v}" # Remove 'v' prefix if present
-        else
-          VERSION="${{ github.event.inputs.version }}"
-        fi
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-        echo "📌 Version: ${VERSION}"
-        
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        default: true
-        components: rustfmt
-        
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        registry-url: 'https://registry.npmjs.org'
-        
-    - name: 🐍 Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        
-    - name: ☕ Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: ${{ env.JAVA_VERSION }}
-        
-    - name: 🔧 Install Python Build Tools
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-        
-    - name: 🛠️ Build All Components
-      run: |
-        echo "🔨 Building all components..."
-        chmod +x build-all.sh
-        ./build-all.sh
-        
-    - name: 🧪 Test CLI
-      run: |
-        ./packages/cluely-detector --version
-        ./packages/cluely-detector check
-        
-    - name: 🧪 Test Node.js Bindings
-      run: |
-        cd bindings/node
-        mkdir -p native
-        cp ../../target/release/libno_cluely_driver.dylib native/
-        node -e "
-          const { NoCluely } = require('./dist/index.js');
-          console.log('✅ Node.js bindings working');
-          const result = NoCluely.detectCluelyDetailed();
-          console.log('Detection result:', result.isDetected);
-        "
-        
-    - name: 🧪 Test Python Bindings
-      run: |
-        cd bindings/python
-        pip install dist/*.whl
-        
-    - name: 🧪 Test Java Bindings
-      run: |
-        cd bindings/java
-        echo "✅ Java bindings working"
-        
-    - name: 📤 Upload Build Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-artifacts
-        path: |
-          packages/
-          bindings/*/dist/
-          bindings/*/target/
-        retention-days: 30
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐛 Debug Workflow Inputs
+        run: |
+          echo "🔍 Event name: '${{ github.event_name }}'"
+          echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+          echo "🔍 Version input: '${{ github.event.inputs.version }}'"
+          echo "🔍 Release tag: '${{ github.event.release.tag_name }}'"
+          echo "🔍 All inputs: ${{ toJSON(github.event.inputs) }}"
+
+      - name: 🔍 Determine Version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            VERSION="${{ github.event.release.tag_name }}"
+            VERSION="${VERSION#v}" # Remove 'v' prefix if present
+          else
+            VERSION="${{ github.event.inputs.version }}"
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "📌 Version: ${VERSION}"
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          default: true
+          components: rustfmt
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: 🔧 Install Python Build Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: 🛠️ Build All Components
+        run: |
+          echo "🔨 Building all components..."
+          chmod +x build-all.sh
+          ./build-all.sh
+
+      - name: 🧪 Test CLI
+        run: |
+          ./packages/cluely-detector --version
+          ./packages/cluely-detector check
+
+      - name: 🧪 Test Node.js Bindings
+        run: |
+          cd bindings/node
+          mkdir -p native
+          cp ../../target/release/libno_cluely_driver.dylib native/
+          node -e "
+            const { NoCluely } = require('./dist/index.js');
+            console.log('✅ Node.js bindings working');
+            const result = NoCluely.detectCluelyDetailed();
+            console.log('Detection result:', result.isDetected);
+          "
+
+      - name: 🧪 Test Python Bindings
+        run: |
+          cd bindings/python
+          pip install dist/*.whl
+
+      - name: 🧪 Test Java Bindings
+        run: |
+          cd bindings/java
+          echo "✅ Java bindings working"
+
+      - name: 📤 Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            packages/
+            bindings/*/dist/
+            bindings/*/target/
+          retention-days: 30
 
   # ===== PUBLISH NODE.JS =====
   publish-nodejs:
@@ -129,50 +129,50 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test
     if: ${{ github.event.inputs.dry_run != 'true' }}
-    
+
     steps:
-    - name: 🐛 Debug Dry Run Status
-      run: |
-        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
-        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
-        echo "🔍 Event name: '${{ github.event_name }}'"
-        
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 📦 Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        registry-url: 'https://registry.npmjs.org'
-        
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        
-    - name: 🔨 Build Node.js Package
-      run: |
-        # Build Rust library first
-        cargo build --lib --release
-        # Copy native library to Node.js package
-        cd bindings/node
-        mkdir -p native
-        cp ../../target/release/libno_cluely_driver.dylib native/
-        cd ../..
-        ./build-all.sh --only-node
-        
-    - name: 📋 Update Package Version
-      run: |
-        cd bindings/node
-        npm version ${{ needs.build-and-test.outputs.version }} --no-git-tag-version
-        
-    - name: 🚀 Publish to npm
-      run: |
-        cd bindings/node
-        npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 🐛 Debug Dry Run Status
+        run: |
+          echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+          echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+          echo "🔍 Event name: '${{ github.event_name }}'"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: 🔨 Build Node.js Package
+        run: |
+          # Build Rust library first
+          cargo build --lib --release
+          # Copy native library to Node.js package
+          cd bindings/node
+          mkdir -p native
+          cp ../../target/release/libno_cluely_driver.dylib native/
+          cd ../..
+          ./build-all.sh --only-node
+
+      - name: 📋 Update Package Version
+        run: |
+          cd bindings/node
+          npm version ${{ needs.build-and-test.outputs.version }} --no-git-tag-version
+
+      - name: 🚀 Publish to npm
+        run: |
+          cd bindings/node
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   # ===== PUBLISH PYTHON =====
   publish-python:
@@ -180,59 +180,59 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test
     if: ${{ github.event.inputs.dry_run != 'true' }}
-    
+
     steps:
-    - name: 🐛 Debug Dry Run Status
-      run: |
-        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
-        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
-        echo "🔍 Event name: '${{ github.event_name }}'"
-        
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🐍 Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        
-    - name: 🔧 Install Build Tools
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-        
-    - name: 📋 Update Package Version
-      run: |
-        cd bindings/python
-        sed -i '' 's/version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' pyproject.toml
-        
-    - name: 🔨 Build Python Package
-      run: |
-        # Build Rust library first
-        cargo build --lib --release
-        # Ensure the library is copied to the package directory
-        cd bindings/python
-        cp ../../target/release/libno_cluely_driver.dylib no_cluely/
-        cd ../..
-        ./build-all.sh --only-python
-        
-    - name: 🔍 Check Package
-      run: |
-        cd bindings/python
-        twine check dist/*
-        
-    - name: 🚀 Publish to PyPI
-      run: |
-        cd bindings/python
-        twine upload dist/*
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      - name: 🐛 Debug Dry Run Status
+        run: |
+          echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+          echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+          echo "🔍 Event name: '${{ github.event_name }}'"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: 🔧 Install Build Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: 📋 Update Package Version
+        run: |
+          cd bindings/python
+          sed -i '' 's/version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' pyproject.toml
+
+      - name: 🔨 Build Python Package
+        run: |
+          # Build Rust library first
+          cargo build --lib --release
+          # Ensure the library is copied to the package directory
+          cd bindings/python
+          cp ../../target/release/libno_cluely_driver.dylib no_cluely/
+          cd ../..
+          ./build-all.sh --only-python
+
+      - name: 🔍 Check Package
+        run: |
+          cd bindings/python
+          twine check dist/*
+
+      - name: 🚀 Publish to PyPI
+        run: |
+          cd bindings/python
+          twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
 
   # ===== PUBLISH JAVA =====
   publish-java:
@@ -240,116 +240,116 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test
     if: ${{ github.event.inputs.dry_run != 'true' }}
-    
+
     steps:
-    - name: 🐛 Debug Dry Run Status
-      run: |
-        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
-        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
-        echo "🔍 Event name: '${{ github.event_name }}'"
-        
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: ☕ Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: ${{ env.JAVA_VERSION }}
-        server-id: ossrh
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
-        
-    - name: 🔐 Setup GPG for Maven Signing
-      run: |
-        if [ -z "$MAVEN_GPG_PRIVATE_KEY" ]; then
-          echo "⚠️ MAVEN_GPG_PRIVATE_KEY not available - Maven artifacts will not be signed"
-          echo "This is normal for development/testing. For production releases, configure GPG secrets."
-          exit 0
-        fi
-        
-        echo "Setting up GPG for Maven artifact signing..."
-        
-        # Create GPG directory with proper permissions
-        mkdir -p ~/.gnupg
-        chmod 700 ~/.gnupg
-        
-        # Configure GPG for non-interactive CI environment
-        echo "use-agent" > ~/.gnupg/gpg.conf
-        echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-        echo "batch" >> ~/.gnupg/gpg.conf
-        echo "no-tty" >> ~/.gnupg/gpg.conf
-        echo "quiet" >> ~/.gnupg/gpg.conf
-        
-        echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
-        echo "default-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
-        echo "max-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
-        
-        # Kill any existing GPG agent
-        pkill -f gpg-agent || true
-        
-        # Set GPG_TTY for proper terminal handling
-        export GPG_TTY=$(tty)
-        
-        # Import GPG key (decode from base64)
-        echo "Importing GPG private key..."
-        echo "$MAVEN_GPG_PRIVATE_KEY" | base64 -d | gpg --batch --no-tty --import || {
-          echo "❌ Failed to import GPG key. Check that MAVEN_GPG_PRIVATE_KEY is a valid base64-encoded GPG key."
-          exit 1
-        }
-        
-        # List keys for verification
-        echo "Listing imported GPG keys:"
-        gpg --batch --no-tty --list-secret-keys --keyid-format LONG || {
-          echo "❌ Failed to list GPG keys"
-          exit 1
-        }
-        
-        # Test signing capability
-        echo "test" | gpg --batch --no-tty --armor --detach-sign --passphrase "$MAVEN_GPG_PASSPHRASE" || {
-          echo "❌ GPG signing test failed"
-          exit 1
-        }
-        
-        echo "✅ GPG setup completed and verified"
-      env:
-        MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-        
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        
-    - name: 📋 Update Package Version
-      run: |
-        cd bindings/java
-        mvn versions:set -DnewVersion=${{ needs.build-and-test.outputs.version }}
-        
-    - name: 🔨 Build Java Package
-      run: |
-        # Build Rust library first
-        cargo build --lib --release
-        ./build-all.sh --only-java
-        
-    - name: 🚀 Publish to Maven Central
-      run: |
-        cd bindings/java
-        
-        # Check if GPG is available for signing
-        if [ -z "$MAVEN_GPG_PRIVATE_KEY" ]; then
-          echo "⚠️ GPG not available - skipping Maven Central publication"
-          echo "Publishing to local repository only for testing..."
-          mvn clean install
-        else
-          echo "📦 Publishing to Maven Central with GPG signing..."
-          mvn clean deploy -P release
-        fi
-      env:
-        MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-        MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      - name: 🐛 Debug Dry Run Status
+        run: |
+          echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+          echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+          echo "🔍 Event name: '${{ github.event_name }}'"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: 🔐 Setup GPG for Maven Signing
+        run: |
+          if [ -z "$MAVEN_GPG_PRIVATE_KEY" ]; then
+            echo "⚠️ MAVEN_GPG_PRIVATE_KEY not available - Maven artifacts will not be signed"
+            echo "This is normal for development/testing. For production releases, configure GPG secrets."
+            exit 0
+          fi
+
+          echo "Setting up GPG for Maven artifact signing..."
+
+          # Create GPG directory with proper permissions
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
+
+          # Configure GPG for non-interactive CI environment
+          echo "use-agent" > ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "batch" >> ~/.gnupg/gpg.conf
+          echo "no-tty" >> ~/.gnupg/gpg.conf
+          echo "quiet" >> ~/.gnupg/gpg.conf
+
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          echo "default-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
+          echo "max-cache-ttl 7200" >> ~/.gnupg/gpg-agent.conf
+
+          # Kill any existing GPG agent
+          pkill -f gpg-agent || true
+
+          # Set GPG_TTY for proper terminal handling
+          export GPG_TTY=$(tty)
+
+          # Import GPG key (decode from base64)
+          echo "Importing GPG private key..."
+          echo "$MAVEN_GPG_PRIVATE_KEY" | base64 -d | gpg --batch --no-tty --import || {
+            echo "❌ Failed to import GPG key. Check that MAVEN_GPG_PRIVATE_KEY is a valid base64-encoded GPG key."
+            exit 1
+          }
+
+          # List keys for verification
+          echo "Listing imported GPG keys:"
+          gpg --batch --no-tty --list-secret-keys --keyid-format LONG || {
+            echo "❌ Failed to list GPG keys"
+            exit 1
+          }
+
+          # Test signing capability
+          echo "test" | gpg --batch --no-tty --armor --detach-sign --passphrase "$MAVEN_GPG_PASSPHRASE" || {
+            echo "❌ GPG signing test failed"
+            exit 1
+          }
+
+          echo "✅ GPG setup completed and verified"
+        env:
+          MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: 📋 Update Package Version
+        run: |
+          cd bindings/java
+          mvn versions:set -DnewVersion=${{ needs.build-and-test.outputs.version }}
+
+      - name: 🔨 Build Java Package
+        run: |
+          # Build Rust library first
+          cargo build --lib --release
+          ./build-all.sh --only-java
+
+      - name: 🚀 Publish to Maven Central
+        run: |
+          cd bindings/java
+
+          # Check if GPG is available for signing
+          if [ -z "$MAVEN_GPG_PRIVATE_KEY" ]; then
+            echo "⚠️ GPG not available - skipping Maven Central publication"
+            echo "Publishing to local repository only for testing..."
+            mvn clean install
+          else
+            echo "📦 Publishing to Maven Central with GPG signing..."
+            mvn clean deploy -P release
+          fi
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
   # ===== PUBLISH RUST CRATE =====
   publish-rust:
@@ -357,198 +357,211 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test
     if: ${{ github.event.inputs.dry_run != 'true' }}
-    
+
     steps:
-    - name: 🐛 Debug Dry Run Status
-      run: |
-        echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
-        echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
-        echo "🔍 Event name: '${{ github.event_name }}'"
-        
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        
-    - name: 📋 Update Crate Version
-      run: |
-        sed -i '' 's/^version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' Cargo.toml
-        sed -i '' 's/^version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' bindings/cli/Cargo.toml
-        
-    - name: 🔨 Build and Test
-      run: |
-        cargo build --release
-        cargo test
-        
-    - name: 🚀 Publish Core Library to crates.io
-      run: |
-        cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
-        
-    - name: ⏳ Wait for Crate Propagation
-      run: sleep 60
-      
-    - name: 🚀 Publish CLI to crates.io
-      run: |
-        cd bindings/cli
-        cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
+      - name: 🐛 Debug Dry Run Status
+        run: |
+          echo "🔍 Dry run input: '${{ github.event.inputs.dry_run }}'"
+          echo "🔍 Dry run condition: ${{ !github.event.inputs.dry_run }}"
+          echo "🔍 Event name: '${{ github.event_name }}'"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: 📋 Update Crate Version
+        run: |
+          sed -i '' 's/^version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' Cargo.toml
+          sed -i '' 's/^version = ".*"/version = "${{ needs.build-and-test.outputs.version }}"/g' bindings/cli/Cargo.toml
+
+      - name: 🔨 Build and Test
+        run: |
+          cargo build --release
+          cargo test
+
+      - name: 🚀 Publish Core Library to crates.io
+        run: |
+          cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
+
+      - name: ⏳ Wait for Crate Propagation
+        run: sleep 60
+
+      - name: 🚀 Publish CLI to crates.io
+        run: |
+          cd bindings/cli
+          cargo publish --allow-dirty --token ${{ secrets.CARGO_TOKEN }}
 
   # ===== GITHUB RELEASES =====
   publish-github-release:
     name: 📋 Publish GitHub Release
     runs-on: macos-latest
-    needs: [build-and-test, publish-nodejs, publish-python, publish-java, publish-rust]
+    needs: [
+      build-and-test,
+      publish-nodejs,
+      publish-python,
+      publish-java,
+      publish-rust,
+    ]
     if: always() && needs.build-and-test.result == 'success'
-    
+
     steps:
-    - name: 📥 Checkout Code
-      uses: actions/checkout@v4
-      
-    - name: 📥 Download Build Artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifacts
-        
-    - name: 🦀 Setup Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        
-    - name: 🔨 Build Distribution
-      run: |
-        # Build Rust library first
-        cargo build --lib --release
-        chmod +x build-all.sh
-        ./build-all.sh
-        
-    - name: 📝 Generate Release Notes
-      id: release-notes
-      run: |
-        cat > release_notes.md << 'EOF'
-        # 🎯 No-Cluely Driver v${{ needs.build-and-test.outputs.version }}
-        
-        Multi-language SDK for detecting Cluely employee monitoring software and its evasion techniques.
-        
-        ## 📦 Installation
-        
-        ### CLI Application
-        ```bash
-        # Download binary from releases or install via Cargo
-        cargo install cluely-detector
-        ```
-        
-        ### Node.js/TypeScript
-        ```bash
-        npm install no-cluely
-        ```
-        
-        ### Python
-        ```bash
-        pip install no-cluely-detector
-        ```
-        
-        ### Java (Maven)
-        ```xml
-        <dependency>
-            <groupId>io.github.terminalsin</groupId>
-            <artifactId>no-cluely</artifactId>
-            <version>${{ needs.build-and-test.outputs.version }}</version>
-        </dependency>
-        ```
-        
-        ### Swift Package Manager
-        ```swift
-        dependencies: [
-            .package(url: "https://github.com/terminalsin/no-cluely", from: "${{ needs.build-and-test.outputs.version }}")
-        ]
-        ```
-        
-        ## 🚀 Quick Start
-        
-        ### CLI
-        ```bash
-        cluely-detector check
-        cluely-detector monitor --interval 30
-        ```
-        
-        ### Node.js
-        ```javascript
-        const { NoCluely } = require('no-cluely');
-        if (NoCluely.isClueLyRunning()) {
-            console.log('⚠️ Employee monitoring detected!');
-        }
-        ```
-        
-        ### Python
-        ```python
-        from no_cluely import ClueLyDetector
-        if ClueLyDetector.is_cluely_running():
-            print('⚠️ Employee monitoring detected!')
-        ```
-        
-        ## 🔧 What's New
-        
-        - ✅ Comprehensive multi-language support
-        - ✅ Advanced evasion technique detection
-        - ✅ Real-time monitoring capabilities
-        - ✅ Modern packaging and distribution
-        - ✅ Detailed reporting and analysis
-        
-        ## 📚 Documentation
-        
-        See individual README files in each language binding directory for detailed usage instructions.
-        
-        ## 🛡️ Privacy & Security
-        
-        This tool is designed to detect employee monitoring software transparently. All detection happens locally on your device - no data is transmitted anywhere.
-        EOF
-        
-    - name: 🏷️ Create/Update Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ needs.build-and-test.outputs.version }}
-        name: "No-Cluely Driver v${{ needs.build-and-test.outputs.version }}"
-        body_path: release_notes.md
-        files: |
-          packages/no-cluely-driver-*-macos.tar.gz
-          packages/cluely-detector
-          packages/*.tgz
-          packages/*.whl
-          packages/*.tar.gz
-          packages/*.jar
-          packages/libno_cluely_driver.dylib
-          packages/no_cluely_driver.h
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: 🦀 Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: 🔨 Build Distribution
+        run: |
+          # Build Rust library first
+          cargo build --lib --release
+          chmod +x build-all.sh
+          ./build-all.sh
+
+      - name: 📝 Generate Release Notes
+        id: release-notes
+        run: |
+          cat > release_notes.md << 'EOF'
+          # 🎯 No-Cluely Driver v${{ needs.build-and-test.outputs.version }}
+
+          Multi-language SDK for detecting Cluely employee monitoring software and its evasion techniques.
+
+          ## 📦 Installation
+
+          ### CLI Application
+          ```bash
+          # Download binary from releases or install via Cargo
+          cargo install cluely-detector
+          ```
+
+          ### Node.js/TypeScript
+          ```bash
+          npm install no-cluely
+          ```
+
+          ### Python
+          ```bash
+          pip install no-cluely-detector
+          ```
+
+          ### Java (Maven)
+          ```xml
+          <dependency>
+              <groupId>io.github.terminalsin</groupId>
+              <artifactId>no-cluely</artifactId>
+              <version>${{ needs.build-and-test.outputs.version }}</version>
+          </dependency>
+          ```
+
+          ### Swift Package Manager
+          ```swift
+          dependencies: [
+              .package(url: "https://github.com/terminalsin/no-cluely", from: "${{ needs.build-and-test.outputs.version }}")
+          ]
+          ```
+
+          ## 🚀 Quick Start
+
+          ### CLI
+          ```bash
+          cluely-detector check
+          cluely-detector monitor --interval 30
+          ```
+
+          ### Node.js
+          ```javascript
+          const { NoCluely } = require('no-cluely');
+          if (NoCluely.isClueLyRunning()) {
+              console.log('⚠️ Employee monitoring detected!');
+          }
+          ```
+
+          ### Python
+          ```python
+          from no_cluely import ClueLyDetector
+          if ClueLyDetector.is_cluely_running():
+              print('⚠️ Employee monitoring detected!')
+          ```
+
+          ## 🔧 What's New
+
+          - ✅ Comprehensive multi-language support
+          - ✅ Advanced evasion technique detection
+          - ✅ Real-time monitoring capabilities
+          - ✅ Modern packaging and distribution
+          - ✅ Detailed reporting and analysis
+
+          ## 📚 Documentation
+
+          See individual README files in each language binding directory for detailed usage instructions.
+
+          ## 🛡️ Privacy & Security
+
+          This tool is designed to detect employee monitoring software transparently. All detection happens locally on your device - no data is transmitted anywhere.
+          EOF
+
+      - name: 🏷️ Create/Update Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.build-and-test.outputs.version }}
+          name: "No-Cluely Driver v${{ needs.build-and-test.outputs.version }}"
+          body_path: release_notes.md
+          files: |
+            packages/no-cluely-driver-*-macos.tar.gz
+            packages/cluely-detector
+            packages/*.tgz
+            packages/*.whl
+            packages/*.tar.gz
+            packages/*.jar
+            packages/libno_cluely_driver.dylib
+            packages/no_cluely_driver.h
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ===== SUMMARY =====
   publish-summary:
     name: 📊 Publish Summary
     runs-on: ubuntu-latest
-    needs: [build-and-test, publish-nodejs, publish-python, publish-java, publish-rust, publish-github-release]
+    needs: [
+      build-and-test,
+      publish-nodejs,
+      publish-python,
+      publish-java,
+      publish-rust,
+      publish-github-release,
+    ]
     if: always()
-    
+
     steps:
-    - name: 📊 Create Summary
-      run: |
-        echo "## 🎯 Release Summary for v${{ needs.build-and-test.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "| Component | Status | Notes |" >> $GITHUB_STEP_SUMMARY
-        echo "|-----------|--------|-------|" >> $GITHUB_STEP_SUMMARY
-        echo "| 🔨 Build & Test | ${{ needs.build-and-test.result == 'success' && '✅ Success' || '❌ Failed' }} | Core build and testing |" >> $GITHUB_STEP_SUMMARY
-        echo "| 📦 Node.js/npm | ${{ needs.publish-nodejs.result == 'success' && '✅ Published' || needs.publish-nodejs.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🐍 Python/PyPI | ${{ needs.publish-python.result == 'success' && '✅ Published' || needs.publish-python.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-detector |" >> $GITHUB_STEP_SUMMARY
-        echo "| ☕ Java/Maven | ${{ needs.publish-java.result == 'success' && '✅ Published' || needs.publish-java.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | io.github.terminalsin:no-cluely |" >> $GITHUB_STEP_SUMMARY
-        echo "| 🦀 Rust/crates.io | ${{ needs.publish-rust.result == 'success' && '✅ Published' || needs.publish-rust.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-driver + cluely-detector |" >> $GITHUB_STEP_SUMMARY
-        echo "| 📋 GitHub Release | ${{ needs.publish-github-release.result == 'success' && '✅ Created' || '❌ Failed' }} | Binaries and distribution |" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 📦 Published Packages:" >> $GITHUB_STEP_SUMMARY
-        echo "- **npm**: \`npm install no-cluely\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **PyPI**: \`pip install no-cluely-detector\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Maven**: \`io.github.terminalsin:no-cluely:${{ needs.build-and-test.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **Cargo**: \`cargo install cluely-detector\`" >> $GITHUB_STEP_SUMMARY
-        echo "- **GitHub**: Download binaries from releases" >> $GITHUB_STEP_SUMMARY 
+      - name: 📊 Create Summary
+        run: |
+          echo "## 🎯 Release Summary for v${{ needs.build-and-test.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status | Notes |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔨 Build & Test | ${{ needs.build-and-test.result == 'success' && '✅ Success' || '❌ Failed' }} | Core build and testing |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Node.js/npm | ${{ needs.publish-nodejs.result == 'success' && '✅ Published' || needs.publish-nodejs.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🐍 Python/PyPI | ${{ needs.publish-python.result == 'success' && '✅ Published' || needs.publish-python.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-detector |" >> $GITHUB_STEP_SUMMARY
+          echo "| ☕ Java/Maven | ${{ needs.publish-java.result == 'success' && '✅ Published' || needs.publish-java.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | io.github.terminalsin:no-cluely |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🦀 Rust/crates.io | ${{ needs.publish-rust.result == 'success' && '✅ Published' || needs.publish-rust.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} | no-cluely-driver + cluely-detector |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📋 GitHub Release | ${{ needs.publish-github-release.result == 'success' && '✅ Created' || '❌ Failed' }} | Binaries and distribution |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Published Packages:" >> $GITHUB_STEP_SUMMARY
+          echo "- **npm**: \`npm install no-cluely\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **PyPI**: \`pip install no-cluely-detector\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Maven**: \`io.github.terminalsin:no-cluely:${{ needs.build-and-test.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cargo**: \`cargo install cluely-detector\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub**: Download binaries from releases" >> $GITHUB_STEP_SUMMARY

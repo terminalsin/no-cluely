@@ -1,6 +1,7 @@
 # Cluely Detector Java 🎯
 
-Java library for detecting Cluely employee monitoring software and its evasion techniques.
+Java library for detecting Cluely employee monitoring software and its evasion
+techniques.
 
 ## Features
 
@@ -14,6 +15,7 @@ Java library for detecting Cluely employee monitoring software and its evasion t
 ## Installation
 
 ### Maven
+
 ```xml
 <dependency>
     <groupId>com.nocluely</groupId>
@@ -23,6 +25,7 @@ Java library for detecting Cluely employee monitoring software and its evasion t
 ```
 
 ### Gradle
+
 ```gradle
 implementation 'com.nocluely:cluely-detector:1.0.0'
 ```
@@ -36,6 +39,7 @@ implementation 'com.nocluely:cluely-detector:1.0.0'
 ## Quick Start
 
 ### Simple Detection
+
 ```java
 import com.nocluely.ClueLyDetector;
 
@@ -48,6 +52,7 @@ if (ClueLyDetector.isClueLyRunning()) {
 ```
 
 ### Detailed Analysis
+
 ```java
 import com.nocluely.ClueLyDetector;
 import com.nocluely.ClueLyDetection;
@@ -73,6 +78,7 @@ Main detection class with static methods.
 #### Methods
 
 ##### `ClueLyDetector.isClueLyRunning(): boolean`
+
 Simple boolean check for Cluely presence.
 
 ```java
@@ -80,6 +86,7 @@ boolean detected = ClueLyDetector.isClueLyRunning();
 ```
 
 ##### `ClueLyDetector.detectClueLy(): DetectionResult`
+
 Basic detection returning status and window count.
 
 ```java
@@ -89,6 +96,7 @@ System.out.println("Windows: " + result.getWindowCount());
 ```
 
 ##### `ClueLyDetector.detectClueLyDetailed(): ClueLyDetection`
+
 Comprehensive detection with full analysis.
 
 ```java
@@ -97,6 +105,7 @@ ClueLyDetection detection = ClueLyDetector.detectClueLyDetailed();
 ```
 
 ##### `ClueLyDetector.getClueLyReport(): String`
+
 Detailed text report of findings.
 
 ```java
@@ -105,6 +114,7 @@ System.out.println(report);
 ```
 
 ##### `ClueLyDetector.getClueLyWindowCount(): int`
+
 Number of Cluely windows detected.
 
 ```java
@@ -142,6 +152,7 @@ for (String technique : detection.getEvasionTechniques()) {
 ## Usage Examples
 
 ### Spring Boot Application
+
 ```java
 @RestController
 @RequestMapping("/api/security")
@@ -175,6 +186,7 @@ public class SecurityResponse {
 ```
 
 ### Background Monitoring Service
+
 ```java
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -249,6 +261,7 @@ public class SecurityMonitorService {
 ```
 
 ### JavaFX Desktop Application
+
 ```java
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
@@ -285,6 +298,7 @@ new Thread(task).start();
 ```
 
 ### Android Integration
+
 ```java
 public class SecurityService extends Service {
     
@@ -339,6 +353,7 @@ public class SecurityService extends Service {
 ```
 
 ### JUnit Testing
+
 ```java
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -396,6 +411,7 @@ public class ClueLyDetectorTest {
 ```
 
 ### Configuration Class
+
 ```java
 @Configuration
 @ConditionalOnProperty(name = "security.monitoring.enabled", havingValue = "true")
@@ -494,4 +510,5 @@ MIT License
 
 ## Contributing
 
-Issues and pull requests welcome at: https://github.com/your-org/no-cluely-driver 
+Issues and pull requests welcome at:
+https://github.com/your-org/no-cluely-driver
